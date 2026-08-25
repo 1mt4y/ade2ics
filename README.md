@@ -1,8 +1,58 @@
-# ADE to ICS Proxy
+# Polytech ADE → Google Calendar
 
-Google Cloud Function that converts ADE Campus calendar to ICS format for Google Calendar subscription.
+Turns the [Polytech Paris-Saclay ADE timetable](https://planning.polytech.universite-paris-saclay.fr)
+into a clean ICS feed you can subscribe to from Google Calendar (or any calendar
+app) — with the **official course types** (CM / TD / TP / C-TD / Contrôle /
+Projet Encadré …) on every event and **exams flagged 🚨** with a 30-minute alarm.
 
-## Quick Deploy
+Works for **every promo**: PEIP, FISE (ET3/ET4/ET5), FISA (APP3/APP4/APP5), FC,
+plus rooms/teachers/external groups via search.
+
+## For students — 2 minutes
+
+1. Open the picker: **`https://ade-to-ics-988522548799.europe-west9.run.app/pick`**
+2. Tick your groups — use the filter box (`APP5`, `ET3 info`, `PEIP2 anglais`…).
+   Optionally search your name to add your **personal** ADE calendar (it may not
+   have all your groups attached — combining it with your group calendars is
+   usually the safest).
+3. Copy the generated URL → Google Calendar → **Autres agendas ＋ → À partir de
+   l'URL**.
+
+Why exams matter here: the school schedules contrôles under the plain course
+name ("Sécurité", "Réseaux 2"…) — only ADE's Type field distinguishes a
+Contrôle from a lecture, and most graded sessions are invisible to name
+matching. This proxy recovers that field.
+
+## API
+
+| Route | Purpose |
+|---|---|
+| `/` | the ICS feed (`resources` required; a bare visit redirects to `/pick`) |
+| `/pick` | picker UI — every group from `catalog.json` + personal-calendar search |
+| `/search?q=name` | resource-name → id lookup (groups, students, teachers, rooms) |
+
+| Query param (feed) | Default | Notes |
+|---|---|---|
+| `resources` | **required** | Resource id or comma list (`1406,1196`) — the **union** of their events, deduplicated |
+| `not` (alias `exclude`) | — | Case-insensitive **regex**; drops events whose summary / description / location matches (e.g. `not=APP5%20GrA` to unselect a group someone attached by mistake) |
+| `name` | `ADE Polytech` | Calendar display name |
+| `projectId` | `2` | **2026-2027.** Bump each school year (see below) |
+| `firstDate` / `lastDate` | academic year | `YYYY-MM-DD` |
+| `host` | new server | override if ADE moves again |
+
+## Privacy
+
+- **No student names are stored** in this repo or service. `catalog.json`
+  contains groups and folders only. Personal calendars are found through
+  `/search`, which queries ADE live — the same data ADE already exposes
+  anonymously.
+- The service holds no accounts, no cookies, no logs beyond Cloud Run's
+  standard request logs.
+- The only credential involved is the school's **public** read-only direct-link
+  token (from the intranet planning page) used to read course types; it grants
+  nothing beyond what any student's browser already gets.
+
+## Self-hosting
 
 ```bash
 gcloud run deploy ade-to-ics \
@@ -13,217 +63,79 @@ gcloud run deploy ade-to-ics \
   --allow-unauthenticated
 ```
 
-## Usage
-
-```
-GET https://your-cloud-run-url/?resources=3018&englishResources=1479
-```
-
-| Parameter          | Default | Description                                  |
-| ------------------ | ------- | -------------------------------------------- |
-| `resources`        | `3018`  | Main group resource ID                       |
-| `englishResources` | `1479`  | English group resource ID (for Anglais swap) |
-| `projectId`        | `19`    | ADE project ID                               |
-
-Subscribe to the URL in Google Calendar: **Settings → Add calendar → From URL**
-
-## Local Development
-
-```bash
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-python main.py
-# Open http://127.0.0.1:8080/
-```
+Local run: `pip install -r requirements.txt && python main.py 1406,1196` →
+writes `ADECal.ics` and prints the exams it flagged.
 
 ---
 
-# Research Documentation
+# How it works (and why it's built this way)
 
-## The Problem
+## The 2026 server migration
 
-ADE Campus provides a calendar interface but:
+| | Host | Anonymous projects |
+|---|---|---|
+| ❌ old | `ade-planning.polytech.universite-paris-saclay.fr` (ADE 6.12) | `projectId=19` → 2025-2026 only |
+| ✅ new | `planning.polytech.universite-paris-saclay.fr` (ADE 6.17) | `projectId=1` → 2025-2026, **`projectId=2` → 2026-2027** |
 
-- No direct ICS export with event types (CM, TD, TP, Contrôle...)
-- The built-in ICS only has basic info, no "Type" field
-- Need to combine two groups: main schedule (3018) minus wrong Anglais + correct Anglais from 1479
+Any old subscription URL pointing at the old host returns an **empty** calendar
+for 2026-2027. Resource ids were preserved in the migration.
 
-## Approaches Tried
+## Pipeline
 
-### ❌ Approach 1: Direct ICS Download + Hex Decoding
+1. **One anonymous request** to the new server's native iCal export
+   (`anonymous_cal.jsp` — a `firstDate`/`lastDate` window is **required** or
+   ADE returns an empty file). Gives times (UTC), rooms, teachers, groups —
+   but *not* the activity Type.
+2. **Official Types via GWT-RPC replay** (`ade_gwt.py`, 5 requests, <0.5 s for
+   a whole year): the legacy RSS + `eventInfo.jsp` route is dead on the new
+   server (`jsp/rss` empty, `eventInfo.jsp` → login), but the `/direct`
+   "Web Direct Planning" GWT app works anonymously through the intranet's
+   `?data=` token (read-only user `visuweb`). We replay
+   `login → loadProject → getLegends → getTimetable`; every returned
+   "SquareEvent" embeds the same eventId the iCal UID encodes
+   (`ADE` + hex("`<project>-<eventId>-<session>-<rep>")) plus display lines
+   `[name, type, teacher…, room…, group…]` — an exact eventId → Type join.
+   Types are cached in-memory 6 h; on failure the feed degrades to a
+   name-based exam heuristic instead of breaking.
+3. Re-emit a Google-friendly `VCALENDAR`: `Course (TYPE)` summaries, `Type:`
+   in the description, `🚨` + `VALARM` on graded types (Contrôle / Épreuve /
+   Examen / Partiel / Soutenance / Certification / Rattrapage).
 
-**Idea:** Download the official `.ics` file and decode event IDs from the UID field.
+## GWT-RPC protocol notes (hard-won, keep for posterity)
 
-```
-UID: ADE60506f6c797465636850617269735361636c6179...3433393733
-     ^^^                                           ^^^^^^^^
-     "ADE" prefix                                  hex-encoded eventId
-```
+* `getLegends` is not just a read — it **sets the server-side selection**
+  (resources + weeks). `getTimetable` serves whatever the last `getLegends`
+  selected and NPEs if none was made. Select all piano weeks (0–52) in one
+  `getLegends`, then a single `getTimetable` returns the entire year.
+* Keep `getTimetable`'s own week list to ONE week — multi-week requests switch
+  the response to an aggregate "Cumul" encoding the parser doesn't read.
+* The permutation + serialization-policy hashes in `ade_gwt.py` belong to the
+  deployed ADE build (6.17 r796, captured 2026-08-25). **An ADE upgrade will
+  change them**; every call then fails cleanly and the feed continues without
+  types. Re-capture them from browser devtools on any intranet direct link
+  (X-GWT-Permutation header + 2nd `|`-field of any ServiceProxy POST body), or
+  override via env vars `ADE_GWT_PERMUTATION`, `ADE_GWT_POLICY_DIRECT`,
+  `ADE_GWT_POLICY_PLANNING`. The `?data=` token: `ADE_DIRECT_DATA`.
 
-**URLs tested:**
+## catalog.json
 
-```
-/jsp/custom/modules/plannings/anonymous_cal.jsp?resources=3018&projectId=19&calType=ical
-```
+The full "Liste des groupes" tree (516 groups + 86 selectable folders across
+PEIP / FISE / FISA / Externes / Groupes Enseignants), harvested from the legacy
+host's anonymous tree (`tree.jsp` category5 walk — see git history for the
+script). Re-harvest whenever the school restructures groups. `/search` covers
+anything not in the file (students, teachers, rooms).
 
-**Result:** Works for ~89% of events. Some UIDs don't decode to valid event IDs.
+## Finding next year's `projectId`
 
-**Problem:** Missing Type field. Had to call `eventInfo.jsp` for each event → slow (sequential).
-
-### ❌ Approach 2: imagemap.jsp Scraping
-
-**Idea:** Scrape `imagemap.jsp` which returns HTML with embedded event IDs.
-
-```
-/jsp/custom/modules/plannings/imagemap.jsp?width=1018&height=590
-```
-
-**Why it failed:**
-
-- Requires JavaScript execution (frame-based architecture)
-- All pages detect iframe context: `if (top.document.location == document.location) top.document.location = "index.jsp";`
-- Resource selection only saved via JS navigation: `document.location = "tree.jsp?selectId=3018"`
-- HTTP requests alone cannot trigger this state
-
-**Tested 8 strategies:**
-
-1. Basic ICS + imagemap → 0 events
-2. With interface.jsp → 0 events
-3. Full frame setup (10 pages) → 0 events
-4. With tree.jsp selection → 0 events
-5. POST to tree.jsp → 0 events
-6. Multiple tree calls → 0 events
-7. With Referer headers → 0 events
-8. Alternative endpoints → 0 events
-
-**Error always returned:**
-
-```
-"To display a planning, you have to:
-- Select one or multiple resources on the resources tree
-- Select a date on the piano"
-```
-
-### ❌ Approach 3: pianoWeeks.jsp / bounds.jsp
-
-**Idea:** Navigate weeks using piano control.
-
-```
-/jsp/custom/modules/plannings/bounds.jsp?week=3&reset=false
-/jsp/custom/modules/plannings/pianoWeeks.jsp
-```
-
-**Result:** Same problem - requires JS frame context.
-
-### ❌ Approach 4: ADE-Scheduler GitHub Repo
-
-**Reference:** [github.com/SnaKyEyeS/ADE-Scheduler](https://github.com/SnaKyEyeS/ADE-Scheduler)
-
-**Finding:** Uses official OAuth API (`/API/projects/...`), not web scraping. Requires credentials - not available for anonymous access.
-
-### ✅ Approach 5: RSS Feed (Final Solution)
-
-**Discovery:** ADE exposes RSS feeds!
-
-```
-/jsp/rss?projectId=19&resources=3018&nbDays=999
-```
-
-**Advantages:**
-
-- Returns all events with GUID (= eventId)
-- No JavaScript required
-- Fast (single HTTP request)
-
-**The GUID field is the eventId:**
-
-```xml
-<item>
-  <guid>43973</guid>
-  <title>Mathématiques</title>
-  <description>...</description>
-</item>
-```
-
-**Complete flow:**
-
-1. Init session via `anonymous_cal.jsp` (sets cookies)
-2. Fetch RSS for main group → filter out "Anglais"
-3. Fetch RSS for English group → keep only "Anglais"
-4. Combine feeds, dedupe by GUID
-5. Parallel fetch `eventInfo.jsp?eventId={guid}` for Type
-6. Build ICS
-
-## Key URLs Reference
-
-| Endpoint                                                                               | Purpose                          |
-| -------------------------------------------------------------------------------------- | -------------------------------- |
-| `/jsp/`                                                                                | Base URL, sets initial cookies   |
-| `/jsp/standard/gui/interface.jsp`                                                      | Frame interface (JS-dependent)   |
-| `/jsp/custom/modules/plannings/anonymous_cal.jsp?resources=X&projectId=Y&calType=ical` | Session init + ICS download      |
-| `/jsp/rss?projectId=X&resources=Y&nbDays=999`                                          | **RSS feed (the solution)**      |
-| `/jsp/custom/modules/plannings/eventInfo.jsp?eventId=X`                                | Event details with Type field    |
-| `/jsp/custom/modules/plannings/imagemap.jsp`                                           | Calendar view (requires JS)      |
-| `/jsp/custom/modules/plannings/bounds.jsp`                                             | Week navigation (requires JS)    |
-| `/jsp/custom/modules/plannings/tree.jsp?selectId=X`                                    | Resource selection (requires JS) |
-
-## Event Type Extraction
-
-From `eventInfo.jsp` response:
-
-```html
-<label>Type : CM</label>
-```
-
-Regex: `<label>Type\s*:\s*([^<]+)</label>`
-
-Types found: `CM`, `TD`, `TP`, `C-TD`, `Projet Encadré`, `Contrôle`, `Présentation`, `Evènement`
-
-## Architecture Lesson
-
-ADE uses a **frame-based JavaScript architecture**:
-
-```
-┌─────────────────────────────────────────┐
-│ interface.jsp (parent frame)            │
-│  ┌─────────────────────────────────────┐│
-│  │ tree.jsp (left)  │ imagemap (right) ││
-│  │                  │                  ││
-│  │ JS: selectId=X   │ Reads state      ││
-│  │ → saves to       │ from server      ││
-│  │   server session │                  ││
-│  └──────────────────┴──────────────────┘│
-└─────────────────────────────────────────┘
-```
-
-**Why HTTP alone fails:**
-
-- Frame pages detect direct access → redirect to index.jsp
-- State only saved during JS navigation
-- No API for direct state manipulation
-
-**Why RSS works:**
-
-- Standalone endpoint, no frame context
-- Cookies from `anonymous_cal.jsp` sufficient
-- Returns complete data
-
-## Performance
-
-| Metric           | Value                               |
-| ---------------- | ----------------------------------- |
-| Total time       | ~2 seconds                          |
-| RSS fetch        | ~0.3s (parallel for both resources) |
-| Type fetching    | ~1.5s (20 parallel workers)         |
-| Events processed | 95                                  |
-| Types found      | 95/95 (100%)                        |
+The current year is the **highest** anonymous project id on the new host
+(2025-26 = 1, 2026-27 = 2, so 2027-28 will be 3). Bump `DEFAULT_PROJECT_ID`
+in `main.py`, re-harvest `catalog.json` if group ids changed, redeploy.
 
 ## Files
 
 ```
-ade2ics/
-├── main.py           # Google Cloud Function
-├── requirements.txt  # Dependencies
-└── README.md         # This file
+main.py            # Cloud Function: feed + /pick + /search
+ade_gwt.py         # GWT-RPC client for official ADE activity Types
+catalog.json       # harvested group tree (no individuals)
+requirements.txt   # functions-framework, requests
 ```

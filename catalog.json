@@ -1,0 +1,3614 @@
+[
+ {
+  "id": 849,
+  "name": "Externes",
+  "kind": "folder",
+  "path": ""
+ },
+ {
+  "id": 136,
+  "name": "Groupes Enseignants",
+  "kind": "folder",
+  "path": ""
+ },
+ {
+  "id": 858,
+  "name": "Polytech Paris-Saclay",
+  "kind": "folder",
+  "path": ""
+ },
+ {
+  "id": 854,
+  "name": "L2 PPE",
+  "kind": "group",
+  "path": "Externes"
+ },
+ {
+  "id": 1377,
+  "name": "L3 Chimie",
+  "kind": "group",
+  "path": "Externes"
+ },
+ {
+  "id": 2048,
+  "name": "L3 MIAGE",
+  "kind": "group",
+  "path": "Externes"
+ },
+ {
+  "id": 2996,
+  "name": "LDD STAPS-SI",
+  "kind": "group",
+  "path": "Externes"
+ },
+ {
+  "id": 150,
+  "name": "M1 ISMH_GE",
+  "kind": "group",
+  "path": "Externes"
+ },
+ {
+  "id": 1243,
+  "name": "M1 ISMH_GE1",
+  "kind": "group",
+  "path": "Externes"
+ },
+ {
+  "id": 1300,
+  "name": "M1 ISMH_GE2",
+  "kind": "group",
+  "path": "Externes"
+ },
+ {
+  "id": 852,
+  "name": "Master EEEA",
+  "kind": "group",
+  "path": "Externes"
+ },
+ {
+  "id": 950,
+  "name": "Master HCI / HCID",
+  "kind": "group",
+  "path": "Externes"
+ },
+ {
+  "id": 855,
+  "name": "Master MIO",
+  "kind": "group",
+  "path": "Externes"
+ },
+ {
+  "id": 49,
+  "name": "Master Mtx",
+  "kind": "group",
+  "path": "Externes"
+ },
+ {
+  "id": 851,
+  "name": "Master SETI",
+  "kind": "group",
+  "path": "Externes"
+ },
+ {
+  "id": 415,
+  "name": "Membres jury",
+  "kind": "group",
+  "path": "Groupes Enseignants"
+ },
+ {
+  "id": 1039,
+  "name": "PEIP1 CP (S1)",
+  "kind": "group",
+  "path": "Groupes Enseignants"
+ },
+ {
+  "id": 96,
+  "name": "PEIP1 CP (S2)",
+  "kind": "group",
+  "path": "Groupes Enseignants"
+ },
+ {
+  "id": 137,
+  "name": "Respo App3",
+  "kind": "group",
+  "path": "Groupes Enseignants"
+ },
+ {
+  "id": 141,
+  "name": "Respo App4",
+  "kind": "group",
+  "path": "Groupes Enseignants"
+ },
+ {
+  "id": 144,
+  "name": "Respo App5",
+  "kind": "group",
+  "path": "Groupes Enseignants"
+ },
+ {
+  "id": 1261,
+  "name": "Respo Dept",
+  "kind": "group",
+  "path": "Groupes Enseignants"
+ },
+ {
+  "id": 162,
+  "name": "Respo Et3",
+  "kind": "group",
+  "path": "Groupes Enseignants"
+ },
+ {
+  "id": 163,
+  "name": "Respo Et4",
+  "kind": "group",
+  "path": "Groupes Enseignants"
+ },
+ {
+  "id": 169,
+  "name": "Respo Et5",
+  "kind": "group",
+  "path": "Groupes Enseignants"
+ },
+ {
+  "id": 1106,
+  "name": "ADMINISTRATION",
+  "kind": "folder",
+  "path": ""
+ },
+ {
+  "id": 871,
+  "name": "FISA",
+  "kind": "folder",
+  "path": ""
+ },
+ {
+  "id": 859,
+  "name": "FISE",
+  "kind": "folder",
+  "path": ""
+ },
+ {
+  "id": 877,
+  "name": "PEIP",
+  "kind": "folder",
+  "path": ""
+ },
+ {
+  "id": 1107,
+  "name": "Administration",
+  "kind": "group",
+  "path": "ADMINISTRATION"
+ },
+ {
+  "id": 1458,
+  "name": "Ecole",
+  "kind": "group",
+  "path": "ADMINISTRATION"
+ },
+ {
+  "id": 2771,
+  "name": "Evènements",
+  "kind": "group",
+  "path": "ADMINISTRATION"
+ },
+ {
+  "id": 153,
+  "name": "PretSalle",
+  "kind": "group",
+  "path": "ADMINISTRATION"
+ },
+ {
+  "id": 2841,
+  "name": "Rencontres",
+  "kind": "group",
+  "path": "ADMINISTRATION"
+ },
+ {
+  "id": 2843,
+  "name": "Transversal",
+  "kind": "group",
+  "path": "ADMINISTRATION"
+ },
+ {
+  "id": 952,
+  "name": "X - Groupes particuliers",
+  "kind": "folder",
+  "path": "ADMINISTRATION"
+ },
+ {
+  "id": 912,
+  "name": "FISA 3A",
+  "kind": "folder",
+  "path": "FISA"
+ },
+ {
+  "id": 937,
+  "name": "FISA 4A",
+  "kind": "folder",
+  "path": "FISA"
+ },
+ {
+  "id": 872,
+  "name": "FISA 5A",
+  "kind": "folder",
+  "path": "FISA"
+ },
+ {
+  "id": 883,
+  "name": "FISE 3A",
+  "kind": "folder",
+  "path": "FISE"
+ },
+ {
+  "id": 863,
+  "name": "FISE 4A",
+  "kind": "folder",
+  "path": "FISE"
+ },
+ {
+  "id": 860,
+  "name": "FISE 5A",
+  "kind": "folder",
+  "path": "FISE"
+ },
+ {
+  "id": 886,
+  "name": "PEIP1",
+  "kind": "folder",
+  "path": "PEIP"
+ },
+ {
+  "id": 890,
+  "name": "PEIP2",
+  "kind": "folder",
+  "path": "PEIP"
+ },
+ {
+  "id": 1521,
+  "name": "BDE",
+  "kind": "group",
+  "path": "ADMINISTRATION / X - Groupes particuliers"
+ },
+ {
+  "id": 1127,
+  "name": "Club ALGO",
+  "kind": "group",
+  "path": "ADMINISTRATION / X - Groupes particuliers"
+ },
+ {
+  "id": 1980,
+  "name": "Mission Handicap",
+  "kind": "group",
+  "path": "ADMINISTRATION / X - Groupes particuliers"
+ },
+ {
+  "id": 941,
+  "name": "FISA 3A ELEC",
+  "kind": "folder",
+  "path": "FISA / FISA 3A"
+ },
+ {
+  "id": 1067,
+  "name": "FISA 3A INFO",
+  "kind": "folder",
+  "path": "FISA / FISA 3A"
+ },
+ {
+  "id": 933,
+  "name": "FISA 3A MATE",
+  "kind": "folder",
+  "path": "FISA / FISA 3A"
+ },
+ {
+  "id": 970,
+  "name": "FISA 3A PHOT",
+  "kind": "folder",
+  "path": "FISA / FISA 3A"
+ },
+ {
+  "id": 913,
+  "name": "FISA 3A TC",
+  "kind": "folder",
+  "path": "FISA / FISA 3A"
+ },
+ {
+  "id": 938,
+  "name": "FISA 4A ELEC",
+  "kind": "folder",
+  "path": "FISA / FISA 4A"
+ },
+ {
+  "id": 1023,
+  "name": "FISA 4A INFO",
+  "kind": "folder",
+  "path": "FISA / FISA 4A"
+ },
+ {
+  "id": 979,
+  "name": "FISA 4A MATE",
+  "kind": "folder",
+  "path": "FISA / FISA 4A"
+ },
+ {
+  "id": 1058,
+  "name": "FISA 4A PHOT",
+  "kind": "folder",
+  "path": "FISA / FISA 4A"
+ },
+ {
+  "id": 1052,
+  "name": "FISA 4A TC",
+  "kind": "folder",
+  "path": "FISA / FISA 4A"
+ },
+ {
+  "id": 875,
+  "name": "FISA 5A ELEC",
+  "kind": "folder",
+  "path": "FISA / FISA 5A"
+ },
+ {
+  "id": 1259,
+  "name": "FISA 5A INFO",
+  "kind": "folder",
+  "path": "FISA / FISA 5A"
+ },
+ {
+  "id": 873,
+  "name": "FISA 5A MATE",
+  "kind": "folder",
+  "path": "FISA / FISA 5A"
+ },
+ {
+  "id": 1477,
+  "name": "FISA 5A PHOT",
+  "kind": "folder",
+  "path": "FISA / FISA 5A"
+ },
+ {
+  "id": 930,
+  "name": "FISA 5A TC",
+  "kind": "folder",
+  "path": "FISA / FISA 5A"
+ },
+ {
+  "id": 955,
+  "name": "FISE 3A ELEC",
+  "kind": "folder",
+  "path": "FISE / FISE 3A"
+ },
+ {
+  "id": 1035,
+  "name": "FISE 3A INFO",
+  "kind": "folder",
+  "path": "FISE / FISE 3A"
+ },
+ {
+  "id": 884,
+  "name": "FISE 3A MATE",
+  "kind": "folder",
+  "path": "FISE / FISE 3A"
+ },
+ {
+  "id": 1148,
+  "name": "FISE 3A PHOT",
+  "kind": "folder",
+  "path": "FISE / FISE 3A"
+ },
+ {
+  "id": 893,
+  "name": "FISE 3A TC",
+  "kind": "folder",
+  "path": "FISE / FISE 3A"
+ },
+ {
+  "id": 1041,
+  "name": "FISE 4A ELEC",
+  "kind": "folder",
+  "path": "FISE / FISE 4A"
+ },
+ {
+  "id": 943,
+  "name": "FISE 4A INFO",
+  "kind": "folder",
+  "path": "FISE / FISE 4A"
+ },
+ {
+  "id": 982,
+  "name": "FISE 4A MATE",
+  "kind": "folder",
+  "path": "FISE / FISE 4A"
+ },
+ {
+  "id": 917,
+  "name": "FISE 4A PHOT",
+  "kind": "folder",
+  "path": "FISE / FISE 4A"
+ },
+ {
+  "id": 864,
+  "name": "FISE 4A TC",
+  "kind": "folder",
+  "path": "FISE / FISE 4A"
+ },
+ {
+  "id": 861,
+  "name": "FISE 5A ELEC",
+  "kind": "folder",
+  "path": "FISE / FISE 5A"
+ },
+ {
+  "id": 881,
+  "name": "FISE 5A INFO",
+  "kind": "folder",
+  "path": "FISE / FISE 5A"
+ },
+ {
+  "id": 968,
+  "name": "FISE 5A MATE",
+  "kind": "folder",
+  "path": "FISE / FISE 5A"
+ },
+ {
+  "id": 1037,
+  "name": "FISE 5A PHOT",
+  "kind": "folder",
+  "path": "FISE / FISE 5A"
+ },
+ {
+  "id": 867,
+  "name": "FISE 5A TC",
+  "kind": "folder",
+  "path": "FISE / FISE 5A"
+ },
+ {
+  "id": 958,
+  "name": "Anglais",
+  "kind": "folder",
+  "path": "PEIP / PEIP1"
+ },
+ {
+  "id": 991,
+  "name": "Groupes TD et TP",
+  "kind": "folder",
+  "path": "PEIP / PEIP1"
+ },
+ {
+  "id": 887,
+  "name": "Options",
+  "kind": "folder",
+  "path": "PEIP / PEIP1"
+ },
+ {
+  "id": 1483,
+  "name": "PEIP1 Aménagements",
+  "kind": "group",
+  "path": "PEIP / PEIP1"
+ },
+ {
+  "id": 1192,
+  "name": "PEIP1 Délégués",
+  "kind": "group",
+  "path": "PEIP / PEIP1"
+ },
+ {
+  "id": 1183,
+  "name": "PEIP1 Elèves concernés",
+  "kind": "group",
+  "path": "PEIP / PEIP1"
+ },
+ {
+  "id": 1474,
+  "name": "PEIP1 Seconde session",
+  "kind": "group",
+  "path": "PEIP / PEIP1"
+ },
+ {
+  "id": 2028,
+  "name": "PEIP1-Rattrapage Chimie",
+  "kind": "group",
+  "path": "PEIP / PEIP1"
+ },
+ {
+  "id": 988,
+  "name": "Parcours",
+  "kind": "folder",
+  "path": "PEIP / PEIP1"
+ },
+ {
+  "id": 1000,
+  "name": "Soutien",
+  "kind": "folder",
+  "path": "PEIP / PEIP1"
+ },
+ {
+  "id": 1008,
+  "name": "Anglais",
+  "kind": "folder",
+  "path": "PEIP / PEIP2"
+ },
+ {
+  "id": 962,
+  "name": "Groupes TD et TP",
+  "kind": "folder",
+  "path": "PEIP / PEIP2"
+ },
+ {
+  "id": 2819,
+  "name": "Options S3",
+  "kind": "folder",
+  "path": "PEIP / PEIP2"
+ },
+ {
+  "id": 1077,
+  "name": "Options S4",
+  "kind": "folder",
+  "path": "PEIP / PEIP2"
+ },
+ {
+  "id": 2854,
+  "name": "PEIP2 Aménagements",
+  "kind": "group",
+  "path": "PEIP / PEIP2"
+ },
+ {
+  "id": 74,
+  "name": "PEIP2 CP (S1)",
+  "kind": "group",
+  "path": "PEIP / PEIP2"
+ },
+ {
+  "id": 1103,
+  "name": "PEIP2 CP (S2)",
+  "kind": "group",
+  "path": "PEIP / PEIP2"
+ },
+ {
+  "id": 1360,
+  "name": "PEIP2 Délégués",
+  "kind": "group",
+  "path": "PEIP / PEIP2"
+ },
+ {
+  "id": 1189,
+  "name": "PEIP2 Elèves concernés",
+  "kind": "group",
+  "path": "PEIP / PEIP2"
+ },
+ {
+  "id": 2838,
+  "name": "PEIP2 Seconde session",
+  "kind": "group",
+  "path": "PEIP / PEIP2"
+ },
+ {
+  "id": 186,
+  "name": "PEIP2 SolidWorks",
+  "kind": "group",
+  "path": "PEIP / PEIP2"
+ },
+ {
+  "id": 927,
+  "name": "Soutien",
+  "kind": "folder",
+  "path": "PEIP / PEIP2"
+ },
+ {
+  "id": 942,
+  "name": "APP3 & FC1 ELEC",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A ELEC"
+ },
+ {
+  "id": 1200,
+  "name": "APP3 & FC1 INFO",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A INFO"
+ },
+ {
+  "id": 1403,
+  "name": "APP3 & FC1 MATE",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A MATE"
+ },
+ {
+  "id": 934,
+  "name": "APP3 MATE Gr1",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A MATE"
+ },
+ {
+  "id": 1244,
+  "name": "APP3 MATE Gr2",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A MATE"
+ },
+ {
+  "id": 1305,
+  "name": "APP3 & FC1 PHOT",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A PHOT"
+ },
+ {
+  "id": 971,
+  "name": "APP3 PHOT TP",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A PHOT"
+ },
+ {
+  "id": 1184,
+  "name": "APP3 & FC1 Promo",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A TC"
+ },
+ {
+  "id": 43,
+  "name": "APP3 Aménagements",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A TC"
+ },
+ {
+  "id": 1121,
+  "name": "APP3 Délégués",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A TC"
+ },
+ {
+  "id": 1380,
+  "name": "APP3 GrA",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A TC"
+ },
+ {
+  "id": 960,
+  "name": "APP3 GrB",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A TC"
+ },
+ {
+  "id": 914,
+  "name": "APP3 GrC",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A TC"
+ },
+ {
+  "id": 1088,
+  "name": "APP3 GrD",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A TC"
+ },
+ {
+  "id": 84,
+  "name": "APP3 concernés",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A TC"
+ },
+ {
+  "id": 1190,
+  "name": "FC1",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A TC"
+ },
+ {
+  "id": 2620,
+  "name": "Groupes Options",
+  "kind": "folder",
+  "path": "FISA / FISA 3A / FISA 3A TC"
+ },
+ {
+  "id": 1266,
+  "name": "APP4 & FC2 ELEC",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A ELEC"
+ },
+ {
+  "id": 1386,
+  "name": "APP4 Délégués ELEC",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A ELEC"
+ },
+ {
+  "id": 1164,
+  "name": "APP4 ELEC Gr1",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A ELEC"
+ },
+ {
+  "id": 1426,
+  "name": "APP4 ELEC Gr2",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A ELEC"
+ },
+ {
+  "id": 1143,
+  "name": "APP4 ELEC GrA",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A ELEC"
+ },
+ {
+  "id": 1427,
+  "name": "APP4 ELEC GrB",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A ELEC"
+ },
+ {
+  "id": 1237,
+  "name": "APP4 ELEC GrC",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A ELEC"
+ },
+ {
+  "id": 2629,
+  "name": "FC2 ELEC",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A ELEC"
+ },
+ {
+  "id": 1262,
+  "name": "APP4 & FC2 INFO",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A INFO"
+ },
+ {
+  "id": 1024,
+  "name": "APP4 Délégués INFO",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A INFO"
+ },
+ {
+  "id": 395,
+  "name": "APP4 INFO Gr1",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A INFO"
+ },
+ {
+  "id": 406,
+  "name": "APP4 INFO Gr2",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A INFO"
+ },
+ {
+  "id": 2630,
+  "name": "FC2 INFO",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A INFO"
+ },
+ {
+  "id": 980,
+  "name": "APP4 & FC2 MATE",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A MATE"
+ },
+ {
+  "id": 1065,
+  "name": "APP4 Délégués MATE",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A MATE"
+ },
+ {
+  "id": 133,
+  "name": "APP4 MATE Corrosion",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A MATE"
+ },
+ {
+  "id": 1320,
+  "name": "APP4 MATE Gr1",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A MATE"
+ },
+ {
+  "id": 1020,
+  "name": "APP4 MATE Gr2",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A MATE"
+ },
+ {
+  "id": 1016,
+  "name": "APP4 MATE Gr3",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A MATE"
+ },
+ {
+  "id": 123,
+  "name": "APP4 MATE SEM",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A MATE"
+ },
+ {
+  "id": 2153,
+  "name": "APP4 MATE TP GR1",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A MATE"
+ },
+ {
+  "id": 2192,
+  "name": "APP4 MATE TP GR2",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A MATE"
+ },
+ {
+  "id": 1318,
+  "name": "FC2 MATE",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A MATE"
+ },
+ {
+  "id": 1247,
+  "name": "APP4 & FC2 PHOT",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A PHOT"
+ },
+ {
+  "id": 1404,
+  "name": "APP4 Délégués PHOT",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A PHOT"
+ },
+ {
+  "id": 1059,
+  "name": "FC2 PHOT",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A PHOT"
+ },
+ {
+  "id": 1053,
+  "name": "APP4 & FC2 Promo",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 903,
+  "name": "APP4 Aménagements",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1344,
+  "name": "APP4 Délégués",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1830,
+  "name": "APP4 Délégués TC",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1466,
+  "name": "APP4 Gr1",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1470,
+  "name": "APP4 Gr2",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1479,
+  "name": "APP4 Gr3",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 159,
+  "name": "APP4 Gr4",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1254,
+  "name": "APP4 GrA",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 44,
+  "name": "APP4 GrA.1",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1111,
+  "name": "APP4 GrA.2",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1465,
+  "name": "APP4 GrB",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 374,
+  "name": "APP4 GrB.1",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1118,
+  "name": "APP4 GrB.2",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1296,
+  "name": "APP4 GrC",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1093,
+  "name": "APP4 GrC.1",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1119,
+  "name": "APP4 GrC.2",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1491,
+  "name": "APP4 concernés",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1335,
+  "name": "APP4 sortants concernés",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 1075,
+  "name": "FC2 Promo",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 35,
+  "name": "FC2 Promo sortante",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 2774,
+  "name": "Groupes Options",
+  "kind": "folder",
+  "path": "FISA / FISA 4A / FISA 4A TC"
+ },
+ {
+  "id": 876,
+  "name": "APP5 ELEC",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A ELEC"
+ },
+ {
+  "id": 1485,
+  "name": "APP5 ELEC Gr1",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A ELEC"
+ },
+ {
+  "id": 953,
+  "name": "APP5 ELEC Gr2",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A ELEC"
+ },
+ {
+  "id": 1108,
+  "name": "APP5 ELEC promo sortante",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A ELEC"
+ },
+ {
+  "id": 1406,
+  "name": "APP5 INFO",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A INFO"
+ },
+ {
+  "id": 1124,
+  "name": "APP5 INFO ParcA",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A INFO"
+ },
+ {
+  "id": 1130,
+  "name": "APP5 INFO ParcB",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A INFO"
+ },
+ {
+  "id": 1125,
+  "name": "APP5 INFO ParcC",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A INFO"
+ },
+ {
+  "id": 1260,
+  "name": "APP5 INFO promo sortante",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A INFO"
+ },
+ {
+  "id": 1285,
+  "name": "APP5 MATE",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE"
+ },
+ {
+  "id": 874,
+  "name": "APP5 MATE Gr1",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE"
+ },
+ {
+  "id": 468,
+  "name": "APP5 MATE Gr1a",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE"
+ },
+ {
+  "id": 469,
+  "name": "APP5 MATE Gr1b",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE"
+ },
+ {
+  "id": 470,
+  "name": "APP5 MATE Gr1c",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE"
+ },
+ {
+  "id": 1331,
+  "name": "APP5 MATE Gr2",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE"
+ },
+ {
+  "id": 495,
+  "name": "APP5 MATE Gr2a",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE"
+ },
+ {
+  "id": 511,
+  "name": "APP5 MATE Gr2b",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE"
+ },
+ {
+  "id": 518,
+  "name": "APP5 MATE Gr2c",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE"
+ },
+ {
+  "id": 1136,
+  "name": "APP5 MATE promo sortante",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE"
+ },
+ {
+  "id": 1137,
+  "name": "Groupes d'options",
+  "kind": "folder",
+  "path": "FISA / FISA 5A / FISA 5A MATE"
+ },
+ {
+  "id": 1507,
+  "name": "APP5 PHOT",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A PHOT"
+ },
+ {
+  "id": 1478,
+  "name": "APP5 PHOT promo sortante",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A PHOT"
+ },
+ {
+  "id": 2837,
+  "name": "APP5 Délégués",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 1044,
+  "name": "APP5 GrA",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 1271,
+  "name": "APP5 GrA.1",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 1249,
+  "name": "APP5 GrA.2",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 1196,
+  "name": "APP5 GrB",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 1326,
+  "name": "APP5 GrB.1",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 1342,
+  "name": "APP5 GrB.2",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 1505,
+  "name": "APP5 GrC",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 1047,
+  "name": "APP5 GrC.1",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 1100,
+  "name": "APP5 GrC.2",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 1353,
+  "name": "APP5 Promo",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 2781,
+  "name": "APP5 concernés",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 906,
+  "name": "APP5 sortants",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 931,
+  "name": "Groupes Management",
+  "kind": "folder",
+  "path": "FISA / FISA 5A / FISA 5A TC"
+ },
+ {
+  "id": 1032,
+  "name": "ET3 ELEC",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A ELEC"
+ },
+ {
+  "id": 1031,
+  "name": "ET3 ELEC Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A ELEC"
+ },
+ {
+  "id": 1263,
+  "name": "ET3 ELEC Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A ELEC"
+ },
+ {
+  "id": 1279,
+  "name": "ET3 INFO",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A INFO"
+ },
+ {
+  "id": 1336,
+  "name": "ET3 INFO Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A INFO"
+ },
+ {
+  "id": 1297,
+  "name": "ET3 INFO Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A INFO"
+ },
+ {
+  "id": 885,
+  "name": "ET3 MATE",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A MATE"
+ },
+ {
+  "id": 1290,
+  "name": "ET3 MATE Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A MATE"
+ },
+ {
+  "id": 1126,
+  "name": "ET3 MATE Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A MATE"
+ },
+ {
+  "id": 1758,
+  "name": "ET3 MATE GrA",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A MATE"
+ },
+ {
+  "id": 1759,
+  "name": "ET3 MATE GrB",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A MATE"
+ },
+ {
+  "id": 1760,
+  "name": "ET3 MATE GrC",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A MATE"
+ },
+ {
+  "id": 473,
+  "name": "ET3 MATE GrD",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A MATE"
+ },
+ {
+  "id": 3138,
+  "name": "ET3 MATE concernés",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A MATE"
+ },
+ {
+  "id": 1149,
+  "name": "Cours - TD",
+  "kind": "folder",
+  "path": "FISE / FISE 3A / FISE 3A PHOT"
+ },
+ {
+  "id": 1307,
+  "name": "TP - Projets",
+  "kind": "folder",
+  "path": "FISE / FISE 3A / FISE 3A PHOT"
+ },
+ {
+  "id": 908,
+  "name": "Anglais, Comm",
+  "kind": "folder",
+  "path": "FISE / FISE 3A / FISE 3A TC"
+ },
+ {
+  "id": 1168,
+  "name": "Economie",
+  "kind": "folder",
+  "path": "FISE / FISE 3A / FISE 3A TC"
+ },
+ {
+  "id": 894,
+  "name": "Groupes autres TD",
+  "kind": "folder",
+  "path": "FISE / FISE 3A / FISE 3A TC"
+ },
+ {
+  "id": 2849,
+  "name": "Groupes fantômes (options, amgt, ER/EC)",
+  "kind": "folder",
+  "path": "FISE / FISE 3A / FISE 3A TC"
+ },
+ {
+  "id": 1213,
+  "name": "Tous (promo)",
+  "kind": "folder",
+  "path": "FISE / FISE 3A / FISE 3A TC"
+ },
+ {
+  "id": 1161,
+  "name": "ET4 ELEC",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A ELEC"
+ },
+ {
+  "id": 1042,
+  "name": "ET4 ELEC Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A ELEC"
+ },
+ {
+  "id": 1116,
+  "name": "ET4 ELEC Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A ELEC"
+ },
+ {
+  "id": 9,
+  "name": "ET4 ELEC GrA",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A ELEC"
+ },
+ {
+  "id": 10,
+  "name": "ET4 ELEC GrB",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A ELEC"
+ },
+ {
+  "id": 11,
+  "name": "ET4 ELEC GrC",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A ELEC"
+ },
+ {
+  "id": 1220,
+  "name": "ET4 ELEC Sortants",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A ELEC"
+ },
+ {
+  "id": 79,
+  "name": "ET4 ELEC concernés",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A ELEC"
+ },
+ {
+  "id": 2413,
+  "name": "ET4 ELEC distanciel",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A ELEC"
+ },
+ {
+  "id": 944,
+  "name": "ET4 INFO",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A INFO"
+ },
+ {
+  "id": 1022,
+  "name": "ET4 INFO Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A INFO"
+ },
+ {
+  "id": 1139,
+  "name": "ET4 INFO Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A INFO"
+ },
+ {
+  "id": 1415,
+  "name": "ET4 INFO Sortants",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A INFO"
+ },
+ {
+  "id": 1422,
+  "name": "ET4 MATE",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE"
+ },
+ {
+  "id": 910,
+  "name": "ET4 MATE Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE"
+ },
+ {
+  "id": 929,
+  "name": "ET4 MATE Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE"
+ },
+ {
+  "id": 127,
+  "name": "ET4 MATE S7",
+  "kind": "folder",
+  "path": "FISE / FISE 4A / FISE 4A MATE"
+ },
+ {
+  "id": 129,
+  "name": "ET4 MATE S8",
+  "kind": "folder",
+  "path": "FISE / FISE 4A / FISE 4A MATE"
+ },
+ {
+  "id": 1054,
+  "name": "ET4 MATE Sortants_1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE"
+ },
+ {
+  "id": 1736,
+  "name": "ET4 MATE Sortants_2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE"
+ },
+ {
+  "id": 1737,
+  "name": "ET4 MATE Sortants_3",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE"
+ },
+ {
+  "id": 1742,
+  "name": "ET4 MATE Sortants_4",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE"
+ },
+ {
+  "id": 1747,
+  "name": "ET4 MATE Sortants_5",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE"
+ },
+ {
+  "id": 2543,
+  "name": "ET4 MATE concernés LCR",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE"
+ },
+ {
+  "id": 2096,
+  "name": "ET4 MATE concernés TTh",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE"
+ },
+ {
+  "id": 1193,
+  "name": "ET4 PHOT",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A PHOT"
+ },
+ {
+  "id": 305,
+  "name": "ET4 PHOT - Photométrie",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A PHOT"
+ },
+ {
+  "id": 459,
+  "name": "ET4 PHOT - TP fibres",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A PHOT"
+ },
+ {
+  "id": 1026,
+  "name": "ET4 PHOT - TP laser",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A PHOT"
+ },
+ {
+  "id": 6,
+  "name": "ET4 PHOT Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A PHOT"
+ },
+ {
+  "id": 7,
+  "name": "ET4 PHOT Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A PHOT"
+ },
+ {
+  "id": 1823,
+  "name": "ET4 PHOT concernés",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A PHOT"
+ },
+ {
+  "id": 1438,
+  "name": "ET4 PHOT sortants",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A PHOT"
+ },
+ {
+  "id": 915,
+  "name": "1-Gr Anglais",
+  "kind": "folder",
+  "path": "FISE / FISE 4A / FISE 4A TC"
+ },
+ {
+  "id": 1089,
+  "name": "3-Gr TD et TP mélangés",
+  "kind": "folder",
+  "path": "FISE / FISE 4A / FISE 4A TC"
+ },
+ {
+  "id": 989,
+  "name": "4-Gr TD par 2 spés",
+  "kind": "folder",
+  "path": "FISE / FISE 4A / FISE 4A TC"
+ },
+ {
+  "id": 2852,
+  "name": "ET4 Aménagements",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC"
+ },
+ {
+  "id": 1492,
+  "name": "ET4 Promo",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC"
+ },
+ {
+  "id": 1536,
+  "name": "ET4 Promo sortante",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC"
+ },
+ {
+  "id": 431,
+  "name": "ET4 concernés",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC"
+ },
+ {
+  "id": 2848,
+  "name": "Gr Initiatives",
+  "kind": "folder",
+  "path": "FISE / FISE 4A / FISE 4A TC"
+ },
+ {
+  "id": 1014,
+  "name": "ET5 ELEC",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A ELEC"
+ },
+ {
+  "id": 1265,
+  "name": "ET5 ELEC Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A ELEC"
+ },
+ {
+  "id": 1503,
+  "name": "ET5 ELEC Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A ELEC"
+ },
+ {
+  "id": 987,
+  "name": "ET5 ELEC Sortants",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A ELEC"
+ },
+ {
+  "id": 862,
+  "name": "ET5 ELEC concernés",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A ELEC"
+ },
+ {
+  "id": 2850,
+  "name": "Gr Options",
+  "kind": "folder",
+  "path": "FISE / FISE 5A / FISE 5A ELEC"
+ },
+ {
+  "id": 1461,
+  "name": "ET5 INFO",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A INFO"
+ },
+ {
+  "id": 1388,
+  "name": "ET5 INFO Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A INFO"
+ },
+ {
+  "id": 1151,
+  "name": "ET5 INFO Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A INFO"
+ },
+ {
+  "id": 1051,
+  "name": "ET5 INFO ParcA",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A INFO"
+ },
+ {
+  "id": 1076,
+  "name": "ET5 INFO ParcB",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A INFO"
+ },
+ {
+  "id": 1095,
+  "name": "ET5 INFO ParcC",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A INFO"
+ },
+ {
+  "id": 882,
+  "name": "ET5 INFO sortants Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A INFO"
+ },
+ {
+  "id": 1113,
+  "name": "ET5 INFO sortants Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A INFO"
+ },
+ {
+  "id": 969,
+  "name": "ET5 MATE",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A MATE"
+ },
+ {
+  "id": 1663,
+  "name": "ET5 MATE Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A MATE"
+ },
+ {
+  "id": 1667,
+  "name": "ET5 MATE Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A MATE"
+ },
+ {
+  "id": 393,
+  "name": "ET5 MATE concernés",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A MATE"
+ },
+ {
+  "id": 528,
+  "name": "ET5 MATE sortants",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A MATE"
+ },
+ {
+  "id": 1218,
+  "name": "Groupes d'options",
+  "kind": "folder",
+  "path": "FISE / FISE 5A / FISE 5A MATE"
+ },
+ {
+  "id": 1038,
+  "name": "ET5 PHOT",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A PHOT"
+ },
+ {
+  "id": 3,
+  "name": "ET5 PHOT Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A PHOT"
+ },
+ {
+  "id": 5,
+  "name": "ET5 PHOT Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A PHOT"
+ },
+ {
+  "id": 78,
+  "name": "ET5 PHOT Souten.Projet",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A PHOT"
+ },
+ {
+  "id": 1233,
+  "name": "ET5 PHOT sortants",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A PHOT"
+ },
+ {
+  "id": 2001,
+  "name": "ET5 Aménagements",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC"
+ },
+ {
+  "id": 1843,
+  "name": "ET5 Polyflex",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC"
+ },
+ {
+  "id": 1272,
+  "name": "ET5 Promo",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC"
+ },
+ {
+  "id": 27,
+  "name": "ET5 Promo sortante",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC"
+ },
+ {
+  "id": 179,
+  "name": "ET5 SolidWorks",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC"
+ },
+ {
+  "id": 1074,
+  "name": "ET5 concernés",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC"
+ },
+ {
+  "id": 1109,
+  "name": "Gr Anglais",
+  "kind": "folder",
+  "path": "FISE / FISE 5A / FISE 5A TC"
+ },
+ {
+  "id": 994,
+  "name": "Gr Management",
+  "kind": "folder",
+  "path": "FISE / FISE 5A / FISE 5A TC"
+ },
+ {
+  "id": 948,
+  "name": "Gr PPP3",
+  "kind": "folder",
+  "path": "FISE / FISE 5A / FISE 5A TC"
+ },
+ {
+  "id": 1028,
+  "name": "PEIP1 Ang-a",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Anglais"
+ },
+ {
+  "id": 959,
+  "name": "PEIP1 Ang-b",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Anglais"
+ },
+ {
+  "id": 1234,
+  "name": "PEIP1 Ang-c",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Anglais"
+ },
+ {
+  "id": 1094,
+  "name": "PEIP1 Ang-d",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Anglais"
+ },
+ {
+  "id": 1064,
+  "name": "PEIP1 Ang-e",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Anglais"
+ },
+ {
+  "id": 1030,
+  "name": "PEIP1 Ang-f",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Anglais"
+ },
+ {
+  "id": 454,
+  "name": "PEIP1 Ang-g",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Anglais"
+ },
+ {
+  "id": 457,
+  "name": "PEIP1 Ang-h",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Anglais"
+ },
+ {
+  "id": 1299,
+  "name": "PEIP1 Ang-i",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Anglais"
+ },
+ {
+  "id": 458,
+  "name": "PEIP1 Ang-j",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Anglais"
+ },
+ {
+  "id": 1010,
+  "name": "PEIP1 Gr1",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 1049,
+  "name": "PEIP1 Gr1A",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 1018,
+  "name": "PEIP1 Gr1B",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 1245,
+  "name": "PEIP1 Gr2",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 1417,
+  "name": "PEIP1 Gr2A",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 1454,
+  "name": "PEIP1 Gr2B",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 1176,
+  "name": "PEIP1 Gr3",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 1162,
+  "name": "PEIP1 Gr3A",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 1334,
+  "name": "PEIP1 Gr3B",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 1240,
+  "name": "PEIP1 Gr4",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 1005,
+  "name": "PEIP1 Gr4A",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 1070,
+  "name": "PEIP1 Gr4B",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 865,
+  "name": "PEIP1 Gr5",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 866,
+  "name": "PEIP1 Gr5A",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 880,
+  "name": "PEIP1 Gr5B",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 992,
+  "name": "PEIP1 Promo",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Groupes TD et TP"
+ },
+ {
+  "id": 3000,
+  "name": "PEIP1 - Business Game",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1402,
+  "name": "PEIP1 - Cyanotype",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1690,
+  "name": "PEIP1 - Du capteur à la décision",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1727,
+  "name": "PEIP1 - Débat scientifique",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1729,
+  "name": "PEIP1 - IOT",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1746,
+  "name": "PEIP1 - LV2",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1765,
+  "name": "PEIP1 - Logic Problem Solving",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1770,
+  "name": "PEIP1 - Matériaux",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1779,
+  "name": "PEIP1 - Matériaux pour l'énergie",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1991,
+  "name": "PEIP1 - Programmation sous Linux 1",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 109,
+  "name": "PEIP1 - Programmation sous Linux 2",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1780,
+  "name": "PEIP1 - Radioactivité, Noyaux et Applications",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1781,
+  "name": "PEIP1 - Robots",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1782,
+  "name": "PEIP1 - Smartphonique",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1045,
+  "name": "PEIP1 - Systèmes Optroniques",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1783,
+  "name": "PEIP1 - Sélection des matériaux",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 1784,
+  "name": "PEIP1 - Web",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Options"
+ },
+ {
+  "id": 999,
+  "name": "PEIP1-Chimie 1",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 1011,
+  "name": "PEIP1-Chimie 2",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 1186,
+  "name": "PEIP1-Numérique 1",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 2065,
+  "name": "PEIP1-Numérique 1A",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 2066,
+  "name": "PEIP1-Numérique 1B",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 1187,
+  "name": "PEIP1-Numérique 2",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 2072,
+  "name": "PEIP1-Numérique 2A",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 2073,
+  "name": "PEIP1-Numérique 2B",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 1170,
+  "name": "PEIP1-Physique 1",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 2474,
+  "name": "PEIP1-Physique 1A",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 2484,
+  "name": "PEIP1-Physique 1B",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 1115,
+  "name": "PEIP1-Physique 2",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 2487,
+  "name": "PEIP1-Physique 2A",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 2488,
+  "name": "PEIP1-Physique 2B",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Parcours"
+ },
+ {
+  "id": 2641,
+  "name": "PEIP1 - Rattrapage",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Soutien"
+ },
+ {
+  "id": 1144,
+  "name": "PEIP1 - Tuteurs",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Soutien"
+ },
+ {
+  "id": 1001,
+  "name": "PEIP1 - Tutorat",
+  "kind": "group",
+  "path": "PEIP / PEIP1 / Soutien"
+ },
+ {
+  "id": 1208,
+  "name": "PEIP2 anglais-A",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Anglais"
+ },
+ {
+  "id": 1009,
+  "name": "PEIP2 anglais-B",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Anglais"
+ },
+ {
+  "id": 1449,
+  "name": "PEIP2 anglais-C",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Anglais"
+ },
+ {
+  "id": 1442,
+  "name": "PEIP2 anglais-D",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Anglais"
+ },
+ {
+  "id": 1160,
+  "name": "PEIP2 anglais-E",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Anglais"
+ },
+ {
+  "id": 1357,
+  "name": "PEIP2 anglais-F",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Anglais"
+ },
+ {
+  "id": 359,
+  "name": "PEIP2 anglais-G",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Anglais"
+ },
+ {
+  "id": 594,
+  "name": "PEIP2 anglais-H",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Anglais"
+ },
+ {
+  "id": 134,
+  "name": "PEIP2 anglais-I",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Anglais"
+ },
+ {
+  "id": 453,
+  "name": "PEIP2 anglais-J",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Anglais"
+ },
+ {
+  "id": 1464,
+  "name": "PEIP2 Gr1",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 954,
+  "name": "PEIP2 Gr1A",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 936,
+  "name": "PEIP2 Gr1B",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 1304,
+  "name": "PEIP2 Gr2",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 1343,
+  "name": "PEIP2 Gr2A",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 1229,
+  "name": "PEIP2 Gr2B",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 963,
+  "name": "PEIP2 Gr3",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 974,
+  "name": "PEIP2 Gr3A",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 1441,
+  "name": "PEIP2 Gr3B",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 602,
+  "name": "PEIP2 Gr4",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 630,
+  "name": "PEIP2 Gr4A",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 653,
+  "name": "PEIP2 Gr4B",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 455,
+  "name": "PEIP2 Gr5",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 460,
+  "name": "PEIP2 Gr5A",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 463,
+  "name": "PEIP2 Gr5B",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 1123,
+  "name": "PEIP2 Promo",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 1467,
+  "name": "TD comm efficace",
+  "kind": "folder",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 891,
+  "name": "TP info (à compléter)",
+  "kind": "folder",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 426,
+  "name": "option Parcours",
+  "kind": "folder",
+  "path": "PEIP / PEIP2 / Groupes TD et TP"
+ },
+ {
+  "id": 2992,
+  "name": "Peip2-opt Biomécanique",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S3"
+ },
+ {
+  "id": 3014,
+  "name": "Peip2-opt Cartable numérique",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S3"
+ },
+ {
+  "id": 3015,
+  "name": "Peip2-opt Laser",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S3"
+ },
+ {
+  "id": 802,
+  "name": "Peip2-opt Programmation Compétitive",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S3"
+ },
+ {
+  "id": 1738,
+  "name": "Peip2-opt Syst.Dyn. et Commande",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S3"
+ },
+ {
+  "id": 2879,
+  "name": "Peip2-opt WEB",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S3"
+ },
+ {
+  "id": 52,
+  "name": "PEIP2-opt_Concept3D",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S4"
+ },
+ {
+  "id": 50,
+  "name": "PEIP2-opt_Crypto_1",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S4"
+ },
+ {
+  "id": 2514,
+  "name": "PEIP2-opt_Crypto_2",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S4"
+ },
+ {
+  "id": 1078,
+  "name": "PEIP2-opt_Cyanotype",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S4"
+ },
+ {
+  "id": 1398,
+  "name": "PEIP2-opt_INFO",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S4"
+ },
+ {
+  "id": 1351,
+  "name": "PEIP2-opt_Piézo",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S4"
+ },
+ {
+  "id": 1399,
+  "name": "PEIP2-opt_Vision Robotique",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S4"
+ },
+ {
+  "id": 3214,
+  "name": "Peip2-opt Arômes et Polymères",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S4"
+ },
+ {
+  "id": 1735,
+  "name": "Peip2-opt Cinétique en électrochimie",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Options S4"
+ },
+ {
+  "id": 1424,
+  "name": "PEIP2 - Rattrapage",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Soutien"
+ },
+ {
+  "id": 1369,
+  "name": "PeiP2 étude1",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Soutien"
+ },
+ {
+  "id": 1493,
+  "name": "PeiP2 étude2",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Soutien"
+ },
+ {
+  "id": 1500,
+  "name": "PeiP2 étude3",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Soutien"
+ },
+ {
+  "id": 975,
+  "name": "APP3 AngSout 1",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A TC / Groupes Options"
+ },
+ {
+  "id": 1310,
+  "name": "APP3 AngSout 2",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A TC / Groupes Options"
+ },
+ {
+  "id": 3205,
+  "name": "APP3 SolidWorks",
+  "kind": "group",
+  "path": "FISA / FISA 3A / FISA 3A TC / Groupes Options"
+ },
+ {
+  "id": 1232,
+  "name": "APP4 AngSout 1",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC / Groupes Options"
+ },
+ {
+  "id": 1241,
+  "name": "APP4 AngSout 2",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC / Groupes Options"
+ },
+ {
+  "id": 3204,
+  "name": "APP4 SolidWorks",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC / Groupes Options"
+ },
+ {
+  "id": 2845,
+  "name": "FC2 AngSout",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC / Groupes Options"
+ },
+ {
+  "id": 2846,
+  "name": "FC2 Opt. Projet",
+  "kind": "group",
+  "path": "FISA / FISA 4A / FISA 4A TC / Groupes Options"
+ },
+ {
+  "id": 1216,
+  "name": "APP5 MATE CAO",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1437,
+  "name": "APP5 MATE Ceram verre TP Gr2",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1439,
+  "name": "APP5 MATE Ceram verre TP Gr3",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1201,
+  "name": "APP5 MATE Ceram verres",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1206,
+  "name": "APP5 MATE Ele finis",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1181,
+  "name": "APP5 MATE Mtx ME TI",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1154,
+  "name": "APP5 MATE Mtx const",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1155,
+  "name": "APP5 MATE Quantique",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1209,
+  "name": "APP5 MATE Simu num",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1214,
+  "name": "APP5 MATE mach learn",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1019,
+  "name": "APP5 Comm pour Entreprendre",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC / Groupes Management"
+ },
+ {
+  "id": 932,
+  "name": "APP5 Connaissances et innovation",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC / Groupes Management"
+ },
+ {
+  "id": 1007,
+  "name": "APP5 Dynamique entrepreneuriale",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC / Groupes Management"
+ },
+ {
+  "id": 1133,
+  "name": "APP5 Gestion industrielle",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC / Groupes Management"
+ },
+ {
+  "id": 1212,
+  "name": "APP5 Intelligence émotionelle",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC / Groupes Management"
+ },
+ {
+  "id": 2886,
+  "name": "APP5 Management Projet",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC / Groupes Management"
+ },
+ {
+  "id": 2887,
+  "name": "APP5 Management international",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC / Groupes Management"
+ },
+ {
+  "id": 1436,
+  "name": "APP5 Monde de la négociation",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC / Groupes Management"
+ },
+ {
+  "id": 3197,
+  "name": "APP5 Perfo éco & sociale",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC / Groupes Management"
+ },
+ {
+  "id": 1173,
+  "name": "APP5 Piloter entr",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC / Groupes Management"
+ },
+ {
+  "id": 1202,
+  "name": "APP5 Stratégies d'entreprises",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC / Groupes Management"
+ },
+ {
+  "id": 1373,
+  "name": "APP5 You in teams",
+  "kind": "group",
+  "path": "FISA / FISA 5A / FISA 5A TC / Groupes Management"
+ },
+ {
+  "id": 1150,
+  "name": "ET3 PHOT",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A PHOT / Cours - TD"
+ },
+ {
+  "id": 1308,
+  "name": "ET3 PHOT Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A PHOT / TP - Projets"
+ },
+ {
+  "id": 1471,
+  "name": "ET3 PHOT Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A PHOT / TP - Projets"
+ },
+ {
+  "id": 1174,
+  "name": "ET3 ANG Promo",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Anglais, Comm"
+ },
+ {
+  "id": 1376,
+  "name": "ET3 Gr 1",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Anglais, Comm"
+ },
+ {
+  "id": 909,
+  "name": "ET3 Gr 2",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Anglais, Comm"
+ },
+ {
+  "id": 1306,
+  "name": "ET3 Gr 3",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Anglais, Comm"
+ },
+ {
+  "id": 993,
+  "name": "ET3 Gr 4",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Anglais, Comm"
+ },
+ {
+  "id": 1219,
+  "name": "ET3 Gr 5",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Anglais, Comm"
+ },
+ {
+  "id": 1165,
+  "name": "ET3 Gr 6",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Anglais, Comm"
+ },
+ {
+  "id": 925,
+  "name": "ET3 Gr 7",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Anglais, Comm"
+ },
+ {
+  "id": 1395,
+  "name": "ET3 Gr 8",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Anglais, Comm"
+ },
+ {
+  "id": 1169,
+  "name": "ET3 ECO 1",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Economie"
+ },
+ {
+  "id": 284,
+  "name": "ET3 ECO 1-S6",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Economie"
+ },
+ {
+  "id": 1235,
+  "name": "ET3 ECO 2",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Economie"
+ },
+ {
+  "id": 286,
+  "name": "ET3 ECO 2-S6",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Economie"
+ },
+ {
+  "id": 1368,
+  "name": "ET3 ECO 3",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Economie"
+ },
+ {
+  "id": 287,
+  "name": "ET3 ECO 3-S6",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Economie"
+ },
+ {
+  "id": 71,
+  "name": "ET3 ECO 4",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Economie"
+ },
+ {
+  "id": 2056,
+  "name": "ET3 ECO 4-S6",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Economie"
+ },
+ {
+  "id": 1391,
+  "name": "ET3 Gr A",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Groupes autres TD"
+ },
+ {
+  "id": 1152,
+  "name": "ET3 Gr B",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Groupes autres TD"
+ },
+ {
+  "id": 1096,
+  "name": "ET3 Gr C",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Groupes autres TD"
+ },
+ {
+  "id": 1063,
+  "name": "ET3 Gr D",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Groupes autres TD"
+ },
+ {
+  "id": 1496,
+  "name": "ET3 Gr E",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Groupes autres TD"
+ },
+ {
+  "id": 1275,
+  "name": "ET3 ANS",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Groupes fantômes (options, amgt, ER/EC)"
+ },
+ {
+  "id": 911,
+  "name": "ET3 Aménagements",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Groupes fantômes (options, amgt, ER/EC)"
+ },
+ {
+  "id": 3670,
+  "name": "ET3 SolidWorks",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Groupes fantômes (options, amgt, ER/EC)"
+ },
+ {
+  "id": 1274,
+  "name": "ET3 concernés",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Groupes fantômes (options, amgt, ER/EC)"
+ },
+ {
+  "id": 1332,
+  "name": "ET3 Promo",
+  "kind": "group",
+  "path": "FISE / FISE 3A / FISE 3A TC / Tous (promo)"
+ },
+ {
+  "id": 2615,
+  "name": "ET4 MATE gp a_S7",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7"
+ },
+ {
+  "id": 2619,
+  "name": "ET4 MATE gp b_S7",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7"
+ },
+ {
+  "id": 156,
+  "name": "ET4 MATE gp1_S7",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7"
+ },
+ {
+  "id": 172,
+  "name": "ET4 MATE gp2_S7",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7"
+ },
+ {
+  "id": 174,
+  "name": "ET4 MATE gp3_S7",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7"
+ },
+ {
+  "id": 1298,
+  "name": "ET4 MATE gp4_S7",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7"
+ },
+ {
+  "id": 138,
+  "name": "options S7",
+  "kind": "folder",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7"
+ },
+ {
+  "id": 1134,
+  "name": "Option µélec_céramique",
+  "kind": "folder",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8"
+ },
+ {
+  "id": 1142,
+  "name": "gp spé S8",
+  "kind": "folder",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8"
+ },
+ {
+  "id": 1490,
+  "name": "ET4 ANG1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 1-Gr Anglais"
+ },
+ {
+  "id": 1374,
+  "name": "ET4 ANG2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 1-Gr Anglais"
+ },
+ {
+  "id": 916,
+  "name": "ET4 ANG3",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 1-Gr Anglais"
+ },
+ {
+  "id": 1495,
+  "name": "ET4 ANG4",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 1-Gr Anglais"
+ },
+ {
+  "id": 1091,
+  "name": "ET4 ANG5",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 1-Gr Anglais"
+ },
+ {
+  "id": 1255,
+  "name": "ET4 ANG6",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 1-Gr Anglais"
+ },
+ {
+  "id": 1230,
+  "name": "ET4 ANG7",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 1-Gr Anglais"
+ },
+ {
+  "id": 1662,
+  "name": "ET4 ANG8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 1-Gr Anglais"
+ },
+ {
+  "id": 310,
+  "name": "ET4 TOEIC Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 1-Gr Anglais"
+ },
+ {
+  "id": 319,
+  "name": "ET4 TOEIC Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 1-Gr Anglais"
+ },
+ {
+  "id": 1112,
+  "name": "ET4 Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 3-Gr TD et TP mélangés"
+ },
+ {
+  "id": 1238,
+  "name": "ET4 Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 3-Gr TD et TP mélangés"
+ },
+ {
+  "id": 1378,
+  "name": "ET4 Gr3",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 3-Gr TD et TP mélangés"
+ },
+ {
+  "id": 1482,
+  "name": "ET4 Gr4",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 3-Gr TD et TP mélangés"
+ },
+ {
+  "id": 1516,
+  "name": "ET4 Gr5",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 3-Gr TD et TP mélangés"
+ },
+ {
+  "id": 1153,
+  "name": "ET4 Gr6",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 3-Gr TD et TP mélangés"
+ },
+ {
+  "id": 1315,
+  "name": "ET4 Gr7",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 3-Gr TD et TP mélangés"
+ },
+ {
+  "id": 1090,
+  "name": "ET4 Gr8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 3-Gr TD et TP mélangés"
+ },
+ {
+  "id": 756,
+  "name": "ET4 GrA",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 4-Gr TD par 2 spés"
+ },
+ {
+  "id": 480,
+  "name": "ET4 GrA.1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 4-Gr TD par 2 spés"
+ },
+ {
+  "id": 483,
+  "name": "ET4 GrA.2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 4-Gr TD par 2 spés"
+ },
+ {
+  "id": 601,
+  "name": "ET4 GrB",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 4-Gr TD par 2 spés"
+ },
+ {
+  "id": 486,
+  "name": "ET4 GrB.1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 4-Gr TD par 2 spés"
+ },
+ {
+  "id": 564,
+  "name": "ET4 GrB.2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 4-Gr TD par 2 spés"
+ },
+ {
+  "id": 595,
+  "name": "ET4 GrC",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 4-Gr TD par 2 spés"
+ },
+ {
+  "id": 565,
+  "name": "ET4 GrC.1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 4-Gr TD par 2 spés"
+ },
+ {
+  "id": 895,
+  "name": "ET4 GrC.2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 4-Gr TD par 2 spés"
+ },
+ {
+  "id": 257,
+  "name": "ET4 GrD",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 4-Gr TD par 2 spés"
+ },
+ {
+  "id": 899,
+  "name": "ET4 GrD.1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 4-Gr TD par 2 spés"
+ },
+ {
+  "id": 896,
+  "name": "ET4 GrD.2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / 4-Gr TD par 2 spés"
+ },
+ {
+  "id": 1370,
+  "name": "ET4 ANS",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / Gr Initiatives"
+ },
+ {
+  "id": 3671,
+  "name": "ET4 SolidWorks",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A TC / Gr Initiatives"
+ },
+ {
+  "id": 1097,
+  "name": "ET5 ELEC GPU",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A ELEC / Gr Options"
+ },
+ {
+  "id": 1481,
+  "name": "ET5 ELEC NRJ_CAPT",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A ELEC / Gr Options"
+ },
+ {
+  "id": 1430,
+  "name": "ET5 ELEC PAR_VID",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A ELEC / Gr Options"
+ },
+ {
+  "id": 1055,
+  "name": "ET5 ELEC SOC",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A ELEC / Gr Options"
+ },
+ {
+  "id": 1268,
+  "name": "ET5 MATE Ele finis",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1239,
+  "name": "ET5 MATE Mtx const",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1242,
+  "name": "ET5 MATE Quantique",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1277,
+  "name": "ET5 MATE Simu num",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A MATE / Groupes d'options"
+ },
+ {
+  "id": 1328,
+  "name": "ET5 ANG G1",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Anglais"
+ },
+ {
+  "id": 1356,
+  "name": "ET5 ANG G2",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Anglais"
+ },
+ {
+  "id": 1207,
+  "name": "ET5 ANG G3",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Anglais"
+ },
+ {
+  "id": 1414,
+  "name": "ET5 ANG G4",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Anglais"
+ },
+ {
+  "id": 3202,
+  "name": "ET5 ANG G5",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Anglais"
+ },
+ {
+  "id": 3215,
+  "name": "ET5 ANG Promo",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Anglais"
+ },
+ {
+  "id": 995,
+  "name": "ET5 Dynamique entreprenariale",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Management"
+ },
+ {
+  "id": 1440,
+  "name": "ET5 Gestion industrielle",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Management"
+ },
+ {
+  "id": 1280,
+  "name": "ET5 Intelligence émot & perform",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Management"
+ },
+ {
+  "id": 1841,
+  "name": "ET5 Management à l'international",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Management"
+ },
+ {
+  "id": 965,
+  "name": "ET5 Mngt Gr1",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Management"
+ },
+ {
+  "id": 986,
+  "name": "ET5 Mngt Gr2",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Management"
+ },
+ {
+  "id": 1027,
+  "name": "ET5 Mngt Gr3",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Management"
+ },
+ {
+  "id": 1050,
+  "name": "ET5 Mngt Gr4",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Management"
+ },
+ {
+  "id": 1472,
+  "name": "ET5 Négociation",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Management"
+ },
+ {
+  "id": 312,
+  "name": "ET5 Performances RSE",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Management"
+ },
+ {
+  "id": 1405,
+  "name": "ET5 You In Teams",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr Management"
+ },
+ {
+  "id": 919,
+  "name": "Gr PPP3 ELEC 1",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr PPP3"
+ },
+ {
+  "id": 951,
+  "name": "Gr PPP3 ELEC 2",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr PPP3"
+ },
+ {
+  "id": 990,
+  "name": "Gr PPP3 ELEC 3",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr PPP3"
+ },
+ {
+  "id": 1012,
+  "name": "Gr PPP3 INFO 1",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr PPP3"
+ },
+ {
+  "id": 1015,
+  "name": "Gr PPP3 INFO 2",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr PPP3"
+ },
+ {
+  "id": 997,
+  "name": "Gr PPP3 MATE 1",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr PPP3"
+ },
+ {
+  "id": 1002,
+  "name": "Gr PPP3 MATE 2",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr PPP3"
+ },
+ {
+  "id": 1003,
+  "name": "Gr PPP3 MATE 3",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr PPP3"
+ },
+ {
+  "id": 1025,
+  "name": "Gr PPP3 PHOT 1",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr PPP3"
+ },
+ {
+  "id": 1034,
+  "name": "Gr PPP3 PHOT 2",
+  "kind": "group",
+  "path": "FISE / FISE 5A / FISE 5A TC / Gr PPP3"
+ },
+ {
+  "id": 1689,
+  "name": "PEIP2 Com1",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TD comm efficace"
+ },
+ {
+  "id": 1739,
+  "name": "PEIP2 Com12",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TD comm efficace"
+ },
+ {
+  "id": 1786,
+  "name": "PEIP2 Com2",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TD comm efficace"
+ },
+ {
+  "id": 1835,
+  "name": "PEIP2 Com3",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TD comm efficace"
+ },
+ {
+  "id": 1998,
+  "name": "PEIP2 Com34",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TD comm efficace"
+ },
+ {
+  "id": 1999,
+  "name": "PEIP2 Com4",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TD comm efficace"
+ },
+ {
+  "id": 252,
+  "name": "PEIP2 Com45",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TD comm efficace"
+ },
+ {
+  "id": 264,
+  "name": "PEIP2 Com5",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TD comm efficace"
+ },
+ {
+  "id": 1066,
+  "name": "PEIP2 InfoA1",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TP info (à compléter)"
+ },
+ {
+  "id": 1355,
+  "name": "PEIP2 InfoB12",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TP info (à compléter)"
+ },
+ {
+  "id": 972,
+  "name": "PEIP2 InfoC23",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TP info (à compléter)"
+ },
+ {
+  "id": 1087,
+  "name": "PEIP2 InfoD34",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TP info (à compléter)"
+ },
+ {
+  "id": 1460,
+  "name": "PEIP2 InfoE45",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TP info (à compléter)"
+ },
+ {
+  "id": 1040,
+  "name": "PEIP2 InfoF5",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / TP info (à compléter)"
+ },
+ {
+  "id": 441,
+  "name": "PEIP2 opt-Chimie",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / option Parcours"
+ },
+ {
+  "id": 443,
+  "name": "PEIP2 opt-Num 1",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / option Parcours"
+ },
+ {
+  "id": 444,
+  "name": "PEIP2 opt-Num 2",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / option Parcours"
+ },
+ {
+  "id": 1117,
+  "name": "PEIP2 opt-Num 3",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / option Parcours"
+ },
+ {
+  "id": 491,
+  "name": "PEIP2 opt-Phys 1",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / option Parcours"
+ },
+ {
+  "id": 500,
+  "name": "PEIP2 opt-Phys 1A",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / option Parcours"
+ },
+ {
+  "id": 439,
+  "name": "PEIP2 opt-Phys 1B",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / option Parcours"
+ },
+ {
+  "id": 493,
+  "name": "PEIP2 opt-Phys 2",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / option Parcours"
+ },
+ {
+  "id": 498,
+  "name": "PEIP2 opt-Phys 2A",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / option Parcours"
+ },
+ {
+  "id": 501,
+  "name": "PEIP2 opt-Phys 2B",
+  "kind": "group",
+  "path": "PEIP / PEIP2 / Groupes TD et TP / option Parcours"
+ },
+ {
+  "id": 103,
+  "name": "ET4 MATE CAO gp1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7 / options S7"
+ },
+ {
+  "id": 142,
+  "name": "ET4 MATE CAO gp2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7 / options S7"
+ },
+ {
+  "id": 145,
+  "name": "ET4 MATE Corrosion",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7 / options S7"
+ },
+ {
+  "id": 139,
+  "name": "ET4 MATE SEM",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7 / options S7"
+ },
+ {
+  "id": 1180,
+  "name": "ET4 MATE TP Corrosion gp1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7 / options S7"
+ },
+ {
+  "id": 1178,
+  "name": "ET4 MATE TP Corrosion gp2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7 / options S7"
+ },
+ {
+  "id": 85,
+  "name": "ET4 MATE mach learn gp1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7 / options S7"
+ },
+ {
+  "id": 143,
+  "name": "ET4 MATE mach learn gp2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S7 / options S7"
+ },
+ {
+  "id": 1365,
+  "name": "céramique",
+  "kind": "folder",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique"
+ },
+ {
+  "id": 1361,
+  "name": "µelec",
+  "kind": "folder",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique"
+ },
+ {
+  "id": 977,
+  "name": "ET4 MATE b1-2_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 512,
+  "name": "ET4 MATE b11-12_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 926,
+  "name": "ET4 MATE b13-14_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 898,
+  "name": "ET4 MATE b15-16_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 964,
+  "name": "ET4 MATE b17-18_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 1327,
+  "name": "ET4 MATE b19-20_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 1341,
+  "name": "ET4 MATE b21-22_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 1363,
+  "name": "ET4 MATE b23-24_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 520,
+  "name": "ET4 MATE b3-4_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 967,
+  "name": "ET4 MATE b5-6_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 464,
+  "name": "ET4 MATE b7-8_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 900,
+  "name": "ET4 MATE b9-10_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 203,
+  "name": "ET4 MATE gp1_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 228,
+  "name": "ET4 MATE gp2_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 233,
+  "name": "ET4 MATE gp3_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 1312,
+  "name": "ET4 MATE gp4_S8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / gp spé S8"
+ },
+ {
+  "id": 148,
+  "name": "ET4 MATE Ceram verres",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique / céramique"
+ },
+ {
+  "id": 1366,
+  "name": "ET4 MATE TP Ceram gp 1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique / céramique"
+ },
+ {
+  "id": 1383,
+  "name": "ET4 MATE TP Ceram gp 2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique / céramique"
+ },
+ {
+  "id": 981,
+  "name": "ET4 MATE TP verres gp 1",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique / céramique"
+ },
+ {
+  "id": 983,
+  "name": "ET4 MATE TP verres gp 2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique / céramique"
+ },
+ {
+  "id": 147,
+  "name": "ET4 MATE Mtx ME TI",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique / µelec"
+ },
+ {
+  "id": 1215,
+  "name": "ET4 MATE TP µelec b1-2",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique / µelec"
+ },
+ {
+  "id": 1226,
+  "name": "ET4 MATE TP µelec b11-12",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique / µelec"
+ },
+ {
+  "id": 1338,
+  "name": "ET4 MATE TP µelec b3-4",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique / µelec"
+ },
+ {
+  "id": 1349,
+  "name": "ET4 MATE TP µelec b5-6",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique / µelec"
+ },
+ {
+  "id": 1314,
+  "name": "ET4 MATE TP µelec b7-8",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique / µelec"
+ },
+ {
+  "id": 1223,
+  "name": "ET4 MATE TP µelec b9-10",
+  "kind": "group",
+  "path": "FISE / FISE 4A / FISE 4A MATE / ET4 MATE S8 / Option µélec_céramique / µelec"
+ }
+]

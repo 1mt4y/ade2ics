@@ -1,755 +1,712 @@
 """
-ADE RSS to ICS - Google Cloud Function
-=======================================
+ADE -> ICS proxy  (Google Cloud Function / Cloud Run)
+=====================================================
 
-This function:
-1. Fetches RSS feeds from ADE (resources=3018 and resources=1479)
-2. Filters out "Anglais" from 3018, keeps only "Anglais" from 1479
-3. Combines feeds, calls eventInfo.jsp to get "Type" field
-4. Returns a proper ICS calendar
+Polytech Paris-Saclay moved its timetable to a NEW ADE server in 2026:
 
-Query Parameters:
-- resources: Main resource ID (default: 3018)
-- englishResources: English group resource ID (default: 1479)
-- projectId: ADE project ID (default: 19)
+    OLD  ade-planning.polytech.universite-paris-saclay.fr   (ADE 6.12, projectId 19 = 2025-2026 only)
+    NEW  planning.polytech.universite-paris-saclay.fr       (ADE 6.17, projectId 2  = 2026-2027)
 
-Deployment:
+The old `anonymous_cal.jsp` URL kept returning an EMPTY calendar because the
+2026-2027 timetable simply does not exist on the old server. The fix is to point
+at the new host with the right projectId.
+
+Good news: the new server's native iCal export works ANONYMOUSLY in a single
+request and already carries clean start/end times (UTC), room and group info.
+So the old, slow RSS + eventInfo.jsp + per-event Type fan-out is gone. We now:
+
+  1. Fetch the native ICS in ONE request (a firstDate/lastDate window is REQUIRED,
+     otherwise ADE returns an empty calendar).
+  2. Recover the OFFICIAL ADE activity Type (CM / TD / C-TD / TP / Contrôle /
+     Projet Encadré / ...) by replaying the /direct GWT-RPC planning app — see
+     ade_gwt.py. Each ICS UID embeds the ADE eventId, and each GWT "square"
+     carries the same id + its type, so matching is exact. Results are cached
+     in-memory for 6 h; on any failure we serve the feed without types (with a
+     name-based exam heuristic as fallback) rather than failing.
+  3. Re-emit a Google-Calendar-friendly feed: "Course (TYPE)", and exams
+     (Contrôle / Épreuve / Examen / Partiel / Soutenance / Certification ...)
+     flagged 🚨 with a 30-minute alarm.
+
+Resource ids: the full group tree (516 groups across PEIP / FISE / FISA /
+Externes) was harvested from the ADE tree into catalog.json — ids were
+preserved in the copy to the new server. Personal student resources exist too
+(one per student, e.g. a search for your name returns your id) but are looked
+up live via /search, never stored here.
+
+Routes:
+    /            the ICS feed (subscribe to this; `resources` is required —
+                 a bare visit redirects to /pick)
+    /pick        HTML picker: every Polytech group (from catalog.json), a
+                 personal-calendar search, and a subscription-URL builder
+    /search?q=   resource-name -> id lookup (via the legacy host's tree, ids
+                 are preserved across the migration). This is also how
+                 students find their own personal resource id — individual
+                 names are deliberately NOT stored anywhere in this project.
+
+Query parameters (feed):
+    resources   REQUIRED. Resource id, or comma-separated ids — the UNION of
+                all their events, deduplicated (e.g. resources=1406,1196)
+    not         Case-insensitive regex; events whose SUMMARY / DESCRIPTION /
+                LOCATION matches are dropped. Use it to unselect what a
+                resource brings in, e.g. not=APP5%20GrA (alias: exclude)
+    name        Calendar display name                  (default: "ADE Polytech")
+    projectId   ADE project id                         (default: 2  = 2026-2027)
+    firstDate   YYYY-MM-DD window start                (default: academic-year start)
+    lastDate    YYYY-MM-DD window end                  (default: next July 31)
+    host        ADE host override                      (default: new server)
+
+Deploy:
     gcloud run deploy ade-to-ics --source . --function proxy_ade \\
         --base-image python314 --region europe-west9 --allow-unauthenticated
 """
 
+import datetime as _dt
+import json
+import logging
+import os
+import re
+import time
+import uuid
+
 import functions_framework
 import requests
-import re
-import concurrent.futures
-import time
-import logging
-import xml.etree.ElementTree as ET
-import uuid
-from html import unescape
-from collections import Counter
 from flask import Response
 from requests.adapters import HTTPAdapter
-from datetime import datetime
-import pytz
 
-# Configure logging with more detail for Cloud Run
+try:
+    import ade_gwt
+except Exception:  # pragma: no cover - keep the feed alive even if the module breaks
+    ade_gwt = None
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
 )
-logger = logging.getLogger("ade_rss_proxy")
+logger = logging.getLogger("ade_ics_proxy")
 
-# Constants
-MAX_RETRIES = 5
-RETRY_DELAY = 0.5  # seconds, will double each retry (0.5, 1, 2, 4, 8)
-REQUEST_TIMEOUT = 10  # seconds for RSS requests
-EVENT_INFO_TIMEOUT = 5  # seconds for eventInfo.jsp requests
-MAX_WORKERS = 20  # parallel workers for type fetching
+# ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
+DEFAULT_HOST = "planning.polytech.universite-paris-saclay.fr"
+LEGACY_HOST = "ade-planning.polytech.universite-paris-saclay.fr"  # for /search
+LEGACY_PROJECT_ID = "19"     # last project on the legacy host (same resource ids)
+DEFAULT_PROJECT_ID = "2"     # 2026-2027 on the new server. Bump this each new year.
 
-BASE_URL = "https://ade-planning.polytech.universite-paris-saclay.fr/jsp"
-PLANNING_BASE = f"{BASE_URL}/custom/modules/plannings"
+REQUEST_TIMEOUT = 20         # seconds
+MAX_RETRIES = 4
+RETRY_BACKOFF = 0.5          # 0.5, 1, 2, 4 ...
 
-# Valid resource ID pattern (numeric only)
-VALID_RESOURCE_PATTERN = re.compile(r"^\d+$")
+CAL_NAME = "ADE Polytech"
 
-# Compile regex patterns for parsing
-TYPE_PATTERN = re.compile(r"<label>Type\s*:\s*([^<]+)</label>")
-RESOURCES_PATTERN = re.compile(r"<b>Ressources</b>(.*)|<b>Resources</b>(.*)", re.DOTALL)
-DATE_TIME_PATTERN = re.compile(
-    r"<p>(\d{2}/\d{2}/\d{4})\s+(\d+h\d+)\s*-\s*(\d+h\d+)</p>"
+VALID_RESOURCES = re.compile(r"^\d+(,\d+)*$")   # "3018" or "3018,1044"
+VALID_ID = re.compile(r"^\d+$")
+VALID_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+# The full Polytech group tree (516 groups + selectable folders), harvested
+# from the ADE tree into catalog.json — ids survived the 2026 server migration.
+# Entries: {"id": int, "name": str, "kind": "group"|"folder", "path": str}.
+# Individual students are deliberately NOT in this file (privacy): the picker
+# finds personal resources live through /search instead.
+def _load_catalog() -> list[dict]:
+    try:
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog.json")
+        with open(path, encoding="utf-8") as fh:
+            return json.load(fh)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("catalog.json not loadable (%s); /pick will be empty", exc)
+        return []
+
+
+CATALOG = _load_catalog()
+
+# Name-based exam markers — FALLBACK ONLY, used when the official ADE type is
+# unavailable. Word-ish boundaries keep precision high (e.g. "contr Qualité" is
+# NOT flagged, only a real "Contrôle" / "Controle" is).
+EXAM_RE = re.compile(
+    r"(contr[oô]le|\bexam\b|examen|[ée]preuve|partiel|soutenance|"
+    r"rattrapage|\btoeic\b|certification|\bqcm\b|[ée]valuation)",
+    re.IGNORECASE,
 )
-ROOM_PATTERN = re.compile(r"\d{3}\s*-\s*[A-Za-z0-9]+")
-TIME_PATTERN = re.compile(r"(\d+)h(\d+)")
+
+# Official ADE types that count as graded / must-not-miss sessions.
+EXAM_TYPE_RE = re.compile(
+    r"(contr[oô]le|exam|[ée]preuve|partiel|rattrap|soutenance|certification)",
+    re.IGNORECASE,
+)
+
+# In-memory cache of {eventId: official type} per (host, projectId, resources).
+# Cloud Run keeps instances warm, so this typically survives between Google
+# Calendar refreshes. Stale entries are reused when ADE's GWT backend fails.
+TYPES_TTL = 6 * 3600
+_types_cache: dict = {"key": None, "at": 0.0, "types": {}}
 
 
-def validate_resources(value: str, param_name: str) -> tuple[bool, str]:
-    """Validate resource ID parameter."""
-    if not value:
-        return False, f"{param_name} cannot be empty"
-    if not VALID_RESOURCE_PATTERN.match(value):
-        return False, f"{param_name} must be numeric (got: {value})"
-    if len(value) > 10:
-        return False, f"{param_name} too long (max 10 digits)"
-    return True, ""
-
-
-def create_session():
-    """Create optimized requests session with connection pooling."""
-    session = requests.Session()
-
-    adapter = HTTPAdapter(
-        pool_connections=MAX_WORKERS,
-        pool_maxsize=MAX_WORKERS,
-        max_retries=2,
-    )
-    session.mount("http://", adapter)
-    session.mount("https://", adapter)
-
-    session.headers.update(
+# ---------------------------------------------------------------------------
+# HTTP
+# ---------------------------------------------------------------------------
+def _session() -> requests.Session:
+    s = requests.Session()
+    adapter = HTTPAdapter(max_retries=0)
+    s.mount("https://", adapter)
+    s.mount("http://", adapter)
+    s.headers.update(
         {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Language": "en-US,en;q=0.9,fr;q=0.8",
-            "Connection": "keep-alive",
+            "User-Agent": "ade2ics/2.0 (+https://github.com/) calendar-sync",
+            "Accept": "text/calendar, text/plain, */*",
+            "Accept-Language": "fr-FR,fr;q=0.9,en;q=0.8",
         }
     )
-
-    return session
-
-
-def init_ade_session(session, resources: str, project_id: str, request_id: str):
-    """Initialize ADE session by visiting required pages with retry logic."""
-    urls = [
-        f"{BASE_URL}/",
-        f"{BASE_URL}/standard/gui/interface.jsp",
-        f"{PLANNING_BASE}/anonymous_cal.jsp?resources={resources}&projectId={project_id}&calType=ical",
-    ]
-
-    for url in urls:
-        for attempt in range(MAX_RETRIES):
-            try:
-                resp = session.get(url, timeout=REQUEST_TIMEOUT)
-                if resp.status_code >= 400:
-                    logger.warning(
-                        f"[{request_id}] Session init got HTTP {resp.status_code} for {url}"
-                    )
-                break
-            except requests.Timeout as e:
-                if attempt < MAX_RETRIES - 1:
-                    wait = RETRY_DELAY * (2**attempt)
-                    logger.warning(
-                        f"[{request_id}] Session init timeout ({url}), retry {attempt + 1}/{MAX_RETRIES} in {wait}s"
-                    )
-                    time.sleep(wait)
-                else:
-                    logger.error(
-                        f"[{request_id}] Session init failed after {MAX_RETRIES} attempts (timeout): {url}"
-                    )
-            except requests.RequestException as e:
-                if attempt < MAX_RETRIES - 1:
-                    wait = RETRY_DELAY * (2**attempt)
-                    logger.warning(
-                        f"[{request_id}] Session init error ({type(e).__name__}), retry {attempt + 1}/{MAX_RETRIES}"
-                    )
-                    time.sleep(wait)
-                else:
-                    logger.error(
-                        f"[{request_id}] Session init failed after {MAX_RETRIES} attempts: {e}"
-                    )
-
-    logger.info(f"[{request_id}] Session initialized for resources={resources}")
+    return s
 
 
-def parse_rss_xml(xml_content: str, request_id: str) -> list[dict]:
-    """Parse RSS XML content and extract event information."""
-    if not xml_content or len(xml_content) < 100:
-        logger.warning(
-            f"[{request_id}] RSS content too short ({len(xml_content)} bytes)"
-        )
-        return []
-
-    try:
-        root = ET.fromstring(xml_content)
-    except ET.ParseError as e:
-        logger.error(f"[{request_id}] XML parse error: {e}")
-        # Log first 500 chars for debugging
-        logger.debug(f"[{request_id}] XML content preview: {xml_content[:500]}")
-        return []
-
-    events = []
-    parse_errors = []
-
-    items = root.findall(".//item")
-    if not items:
-        logger.warning(f"[{request_id}] No <item> elements found in RSS")
-        return []
-
-    for item in items:
+def fetch_native_ics(
+    session: requests.Session,
+    host: str,
+    resources: str,
+    project_id: str,
+    first_date: str,
+    last_date: str,
+    request_id: str,
+) -> str:
+    """Fetch ADE's native anonymous iCal export in a single request."""
+    url = (
+        f"https://{host}/jsp/custom/modules/plannings/anonymous_cal.jsp"
+        f"?resources={resources}&projectId={project_id}&calType=ical"
+        f"&firstDate={first_date}&lastDate={last_date}"
+    )
+    last_err = None
+    for attempt in range(MAX_RETRIES):
         try:
-            guid_elem = item.find("guid")
-            title_elem = item.find("title")
-            desc_elem = item.find("description")
+            resp = session.get(url, timeout=REQUEST_TIMEOUT)
+            if resp.status_code == 200:
+                resp.encoding = "utf-8"
+                return resp.text
+            last_err = f"HTTP {resp.status_code}"
+            logger.warning("[%s] ADE returned %s (attempt %d)", request_id, last_err, attempt + 1)
+        except requests.RequestException as exc:
+            last_err = f"{type(exc).__name__}: {exc}"
+            logger.warning("[%s] ADE request error %s (attempt %d)", request_id, last_err, attempt + 1)
+        if attempt < MAX_RETRIES - 1:
+            time.sleep(RETRY_BACKOFF * (2 ** attempt))
+    raise RuntimeError(last_err or "unknown error")
 
-            if guid_elem is None or guid_elem.text is None:
-                parse_errors.append("Missing GUID")
-                continue
-            if title_elem is None or title_elem.text is None:
-                parse_errors.append(f"Missing title for GUID {guid_elem.text}")
-                continue
 
-            guid = guid_elem.text.strip()
-            title = title_elem.text.strip()
+# ---------------------------------------------------------------------------
+# ICS parsing / re-emission
+# ---------------------------------------------------------------------------
+def _unfold(ics: str) -> list[str]:
+    """Un-fold RFC 5545 continuation lines (CRLF + space/tab)."""
+    raw = ics.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+    out: list[str] = []
+    for line in raw:
+        if line[:1] in (" ", "\t") and out:
+            out[-1] += line[1:]
+        else:
+            out.append(line)
+    return out
 
-            description = ""
-            if desc_elem is not None:
-                description = desc_elem.text or "".join(desc_elem.itertext())
-            description = unescape(unescape(description or ""))
 
-            # Parse date/time: "<p>30/03/2026 10h30 - 12h30</p>"
-            date_time_match = DATE_TIME_PATTERN.search(description)
-
-            if not date_time_match:
-                parse_errors.append(f"No date/time for '{title}' (GUID: {guid})")
-                continue
-
-            date_str = date_time_match.group(1)
-            start_time = date_time_match.group(2)
-            end_time = date_time_match.group(3)
-
-            day, month, year = date_str.split("/")
-            start_match = TIME_PATTERN.match(start_time)
-            end_match = TIME_PATTERN.match(end_time)
-
-            if not start_match or not end_match:
-                parse_errors.append(f"Invalid time format for '{title}'")
-                continue
-
-            start_h, start_m = start_match.groups()
-            end_h, end_m = end_match.groups()
-
-            start_dt = datetime(
-                int(year), int(month), int(day), int(start_h), int(start_m)
-            )
-            end_dt = datetime(int(year), int(month), int(day), int(end_h), int(end_m))
-
-            # Extract resources
-            resources = []
-            location = ""
-            professor = ""
-
-            resources_match = RESOURCES_PATTERN.search(description)
-            if resources_match:
-                resources_section = resources_match.group(1) or resources_match.group(2)
-                resources_section = re.sub(r"^\s*<br\s*/?>", "", resources_section)
-                resources_section = re.sub(
-                    r"</p>.*", "", resources_section, flags=re.DOTALL
-                )
-                resources_section = resources_section.replace("]]>", "").strip()
-                raw_resources = [
-                    r.strip()
-                    for r in re.split(r"<br\s*/?>", resources_section)
-                    if r.strip()
-                ]
-
-                for r in raw_resources:
-                    resources.append(r)
-                    # Room pattern: "620 - B016"
-                    if ROOM_PATTERN.search(r):
-                        location = r
-                    # Professor heuristic: no digits, not group labels, has "Firstname Lastname" pattern
-                    if not professor:
-                        upper_r = r.upper()
-                        excluded_keywords = {
-                            "APP",
-                            "ET",
-                            "FC",
-                            "INFO",
-                            "PROMO",
-                            "GROUPE",
-                            "GROUP",
-                        }
-                        if (
-                            not re.search(r"\d", r)
-                            and not any(kw in upper_r for kw in excluded_keywords)
-                            and re.search(r"[A-Za-zÀ-ÖØ-öø-ÿ].+\s+[A-Za-zÀ-ÖØ-öø-ÿ]", r)
-                        ):
-                            professor = r
-
-            # Fallback for location
-            if not location and resources:
-                location = resources[-1]
-            if not location:
-                loc_match = ROOM_PATTERN.search(description)
-                if loc_match:
-                    location = loc_match.group(0).strip()
-
-            events.append(
-                {
-                    "guid": guid,
-                    "title": title,
-                    "start": start_dt,
-                    "end": end_dt,
-                    "resources": resources,
-                    "location": location,
-                    "professor": professor,
-                    "type": None,
-                }
-            )
-        except ValueError as e:
-            parse_errors.append(f"Value error parsing event: {e}")
-            continue
-        except Exception as e:
-            parse_errors.append(f"Unexpected error: {type(e).__name__}: {e}")
-            continue
-
-    # Log parsing summary
-    if parse_errors:
-        logger.warning(
-            f"[{request_id}] RSS parsing: {len(events)} ok, {len(parse_errors)} errors"
-        )
-        # Log first few errors
-        for err in parse_errors[:5]:
-            logger.debug(f"[{request_id}] Parse error: {err}")
-        if len(parse_errors) > 5:
-            logger.debug(f"[{request_id}] ... and {len(parse_errors) - 5} more errors")
-
+def parse_events(ics: str) -> list[dict]:
+    """Split a VCALENDAR into a list of {property: value} event dicts."""
+    events: list[dict] = []
+    current: dict | None = None
+    for line in _unfold(ics):
+        if line == "BEGIN:VEVENT":
+            current = {}
+        elif line == "END:VEVENT":
+            if current is not None:
+                events.append(current)
+            current = None
+        elif current is not None and ":" in line:
+            key, val = line.split(":", 1)
+            key = key.split(";", 1)[0]  # drop any params, e.g. DTSTART;TZID=
+            current[key] = val
     return events
 
 
-def fetch_rss_events(session, resources: int, request_id: str) -> list[dict]:
-    """Fetch RSS feed for a resource and parse events."""
-    rss_url = f"{BASE_URL}/rss?projectId=19&resources={resources}&nbDays=999"
-
-    for attempt in range(MAX_RETRIES):
-        try:
-            resp = session.get(rss_url, timeout=REQUEST_TIMEOUT)
-
-            if resp.status_code != 200:
-                logger.warning(
-                    f"[{request_id}] RSS {resources} returned HTTP {resp.status_code}"
-                )
-                if attempt < MAX_RETRIES - 1:
-                    time.sleep(RETRY_DELAY * (2**attempt))
-                    continue
-                return []
-
-            resp.encoding = "utf-8"
-            content_length = len(resp.text)
-
-            if content_length < 100:
-                logger.warning(
-                    f"[{request_id}] RSS {resources} suspiciously short ({content_length} bytes)"
-                )
-
-            events = parse_rss_xml(resp.text, request_id)
-            logger.debug(
-                f"[{request_id}] RSS {resources}: {content_length} bytes → {len(events)} events"
-            )
-            return events
-
-        except requests.Timeout:
-            if attempt < MAX_RETRIES - 1:
-                wait = RETRY_DELAY * (2**attempt)
-                logger.warning(
-                    f"[{request_id}] RSS {resources} timeout, retry {attempt + 1}/{MAX_RETRIES} in {wait}s"
-                )
-                time.sleep(wait)
-            else:
-                logger.error(
-                    f"[{request_id}] RSS {resources} failed after {MAX_RETRIES} attempts (timeout)"
-                )
-                return []
-        except requests.RequestException as e:
-            if attempt < MAX_RETRIES - 1:
-                wait = RETRY_DELAY * (2**attempt)
-                logger.warning(
-                    f"[{request_id}] RSS {resources} error ({type(e).__name__}), retry {attempt + 1}/{MAX_RETRIES}"
-                )
-                time.sleep(wait)
-            else:
-                logger.error(
-                    f"[{request_id}] RSS {resources} failed after {MAX_RETRIES} attempts: {e}"
-                )
-                return []
-
-    return []
+def event_id_of(uid: str) -> int | None:
+    """ADE UIDs are `ADE` + hex("`<projectName>-<eventId>-<session>-<rep>")."""
+    if not uid or not uid.startswith("ADE"):
+        return None
+    try:
+        decoded = bytes.fromhex(uid[3:]).decode("latin-1")
+    except ValueError:
+        return None
+    parts = decoded.split("-")
+    if len(parts) >= 3 and parts[-3].isdigit():
+        return int(parts[-3])
+    return None
 
 
-def fetch_event_type(event_id: str, session, request_id: str) -> tuple[str, str]:
-    """Fetch event type from eventInfo.jsp with retry logic."""
-    url = f"{PLANNING_BASE}/eventInfo.jsp?eventId={event_id}"
+def get_official_types(
+    host: str, project_id: str, resources: str, events: list[dict], request_id: str
+) -> dict[int, str]:
+    """Official ADE types via the GWT backend, cached 6 h, stale on error."""
+    if ade_gwt is None:
+        return {}
+    key = (host, project_id, resources)
+    now = time.time()
+    if _types_cache["key"] == key and now - _types_cache["at"] < TYPES_TTL:
+        return _types_cache["types"]
 
-    for attempt in range(MAX_RETRIES):
-        try:
-            resp = session.get(url, timeout=EVENT_INFO_TIMEOUT)
-
-            if resp.status_code != 200:
-                if attempt < MAX_RETRIES - 1:
-                    time.sleep(RETRY_DELAY * (2**attempt))
-                    continue
-                logger.debug(
-                    f"[{request_id}] eventInfo {event_id}: HTTP {resp.status_code}"
-                )
-                return event_id, ""
-
-            html = resp.text
-
-            # Check for session redirect (ADE kicks us back to login)
-            if "top.document.location='index.jsp'" in html or len(html) < 500:
-                if attempt < MAX_RETRIES - 1:
-                    time.sleep(RETRY_DELAY * (2**attempt))
-                    continue
-                logger.debug(
-                    f"[{request_id}] eventInfo {event_id}: session expired or invalid response"
-                )
-                return event_id, ""
-
-            type_match = TYPE_PATTERN.search(html)
-            if type_match:
-                return event_id, type_match.group(1).strip()
-
-            # Type not found in HTML (might be a valid event without type)
-            return event_id, ""
-
-        except requests.Timeout:
-            if attempt < MAX_RETRIES - 1:
-                time.sleep(RETRY_DELAY * (2**attempt))
-            else:
-                logger.debug(f"[{request_id}] eventInfo {event_id}: timeout")
-                return event_id, ""
-        except requests.RequestException:
-            if attempt < MAX_RETRIES - 1:
-                time.sleep(RETRY_DELAY * (2**attempt))
-            else:
-                return event_id, ""
-
-    return event_id, ""
+    try:
+        types = ade_gwt.fetch_types(
+            host,
+            int(project_id),
+            [int(r) for r in resources.split(",")],
+        )
+        _types_cache.update({"key": key, "at": now, "types": types})
+        logger.info("[%s] GWT types: %d activities", request_id, len(types))
+        return types
+    except Exception as exc:  # noqa: BLE001 - types are best-effort
+        logger.warning("[%s] GWT type fetch failed (%s); %s", request_id, exc,
+                       "serving stale types" if _types_cache["key"] == key else "no types")
+        return _types_cache["types"] if _types_cache["key"] == key else {}
 
 
-def build_ics_calendar(events: list[dict]) -> str:
-    """Build ICS calendar string from events."""
-    tz = pytz.timezone("Europe/Paris")
+def _fold(line: str) -> str:
+    """Fold a line to <=75 octets per RFC 5545 (byte-aware)."""
+    data = line.encode("utf-8")
+    if len(data) <= 75:
+        return line
+    chunks, start = [], 0
+    limit = 75
+    while start < len(data):
+        end = min(start + limit, len(data))
+        # don't split a multi-byte char
+        while end < len(data) and (data[end] & 0xC0) == 0x80:
+            end -= 1
+        chunks.append(data[start:end])
+        start = end
+        limit = 74  # continuation lines start with a leading space
+    return "\r\n ".join(c.decode("utf-8") for c in chunks)
 
+
+def _esc(text: str) -> str:
+    return (
+        text.replace("\\", "\\\\")
+        .replace(";", "\\;")
+        .replace(",", "\\,")
+        .replace("\n", "\\n")
+    )
+
+
+def is_exam(summary: str) -> bool:
+    return bool(EXAM_RE.search(summary or ""))
+
+
+def build_calendar(
+    events: list[dict],
+    types: dict[int, str] | None = None,
+    cal_name: str = CAL_NAME,
+) -> tuple[str, int]:
+    """Re-emit events as a clean, Google-friendly VCALENDAR. Returns (ics, exam_count)."""
+    types = types or {}
+    now = _dt.datetime.now(_dt.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
-        "PRODID:-//ADE RSS to ICS Proxy//EN",
+        "PRODID:-//ade2ics//Polytech ADE proxy//EN",
         "CALSCALE:GREGORIAN",
         "METHOD:PUBLISH",
-        "X-WR-CALNAME:ADE Planning",
+        f"X-WR-CALNAME:{cal_name}",
+        "X-WR-TIMEZONE:Europe/Paris",
+        "X-PUBLISHED-TTL:PT6H",
+        "REFRESH-INTERVAL;VALUE=DURATION:PT6H",
     ]
-
+    exam_count = 0
     for ev in events:
-        # Localize and convert to UTC
-        start_dt = tz.localize(ev["start"])
-        end_dt = tz.localize(ev["end"])
-        start_utc = start_dt.astimezone(pytz.UTC)
-        end_utc = end_dt.astimezone(pytz.UTC)
+        dtstart = ev.get("DTSTART")
+        dtend = ev.get("DTEND")
+        summary = ev.get("SUMMARY", "").strip()
+        if not dtstart or not summary:
+            continue
 
-        # Format timestamps
-        dtstart = start_utc.strftime("%Y%m%dT%H%M%SZ")
-        dtend = end_utc.strftime("%Y%m%dT%H%M%SZ")
+        uid = ev.get("UID") or f"{abs(hash(dtstart + summary))}@ade2ics"
 
-        # Build summary
-        summary = ev["title"]
-        event_type = (ev.get("type") or "").strip()
-        event_type_lower = event_type.lower()
+        # Official ADE type when we have it; name-based heuristic otherwise.
+        ev_type = types.get(event_id_of(uid) or -1, "")
+        if ev_type:
+            exam = bool(EXAM_TYPE_RE.search(ev_type))
+            summary = f"{summary} ({ev_type})"
+        else:
+            exam = is_exam(summary)
+        if exam:
+            exam_count += 1
+            summary = f"🚨 {summary}"
 
-        if event_type_lower in {"contrôle", "controle"}:
-            summary = f"🚨 [CONTROLE] {summary}"
-        elif event_type:
-            summary = f"{summary} ({event_type})"
-
-        # Escape special chars for ICS
-        summary = summary.replace("\\", "\\\\").replace(",", "\\,").replace(";", "\\;")
-
-        # Build description
-        desc_parts = [f"Event ID: {ev['guid']}"]
-        if ev.get("type"):
-            desc_parts.append(f"Type: {ev['type']}")
-        if ev.get("professor"):
-            desc_parts.append(f"Professor: {ev['professor']}")
-        if ev.get("resources"):
-            desc_parts.append(f"Resources: {', '.join(ev['resources'])}")
-        description = "\\n".join(desc_parts)
-
-        # Location
-        location = ev.get("location", "")
-        if location:
-            location = (
-                location.replace("\\", "\\\\").replace(",", "\\,").replace(";", "\\;")
-            )
-
-        lines.append("BEGIN:VEVENT")
-        lines.append(
-            f"UID:{ev['guid']}@ade-planning.polytech.universite-paris-saclay.fr"
-        )
-        lines.append(f"DTSTART:{dtstart}")
-        lines.append(f"DTEND:{dtend}")
-        lines.append(f"SUMMARY:{summary}")
-        lines.append(f"DESCRIPTION:{description}")
-        if location:
-            lines.append(f"LOCATION:{location}")
-        lines.append("STATUS:CONFIRMED")
-        lines.append("END:VEVENT")
+        out = ["BEGIN:VEVENT", f"UID:{uid}", f"DTSTAMP:{now}", f"DTSTART:{dtstart}"]
+        if dtend:
+            out.append(f"DTEND:{dtend}")
+        out.append(f"SUMMARY:{_esc(summary)}")
+        if ev.get("LOCATION"):
+            out.append(f"LOCATION:{_esc(ev['LOCATION'])}")
+        if ev.get("DESCRIPTION") or ev_type:
+            # ADE's description already uses literal "\n"; keep it, just re-escape commas/semicolons safely
+            desc = ev.get("DESCRIPTION", "").replace("\\n", "\n")
+            if ev_type:
+                desc = f"Type: {ev_type}\n{desc}"
+            out.append(f"DESCRIPTION:{_esc(desc)}")
+        if exam:
+            out.append("CATEGORIES:EXAM")
+            # 30-minute heads-up for graded sessions
+            out += [
+                "BEGIN:VALARM",
+                "ACTION:DISPLAY",
+                "TRIGGER:-PT30M",
+                f"DESCRIPTION:{_esc(summary)}",
+                "END:VALARM",
+            ]
+        out.append("STATUS:CONFIRMED")
+        out.append("END:VEVENT")
+        lines.extend(out)
 
     lines.append("END:VCALENDAR")
+    return "\r\n".join(_fold(l) for l in lines) + "\r\n", exam_count
 
-    return "\r\n".join(lines)
+
+# ---------------------------------------------------------------------------
+# Defaults
+# ---------------------------------------------------------------------------
+def default_window(today: _dt.date | None = None) -> tuple[str, str]:
+    """Academic-year window: Aug 1 of the current school year -> Jul 31 of the next."""
+    today = today or _dt.date.today()
+    start_year = today.year if today.month >= 8 else today.year - 1
+    return f"{start_year}-08-01", f"{start_year + 1}-07-31"
 
 
+# ---------------------------------------------------------------------------
+# /pick — subscription URL builder
+# ---------------------------------------------------------------------------
+def _picker_html() -> str:
+    catalog_json = json.dumps(CATALOG, ensure_ascii=False)
+    return """<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polytech ADE → Google Calendar</title>
+<style>
+ body{font-family:system-ui,sans-serif;max-width:780px;margin:2rem auto;padding:0 1rem;color:#222}
+ h1{font-size:1.4rem} h2{font-size:1rem;margin:1.2rem 0 .3rem;color:#555}
+ label{display:block;padding:.12rem 0 .12rem 1rem;cursor:pointer}
+ code{background:#f4f4f4;padding:.1rem .3rem;border-radius:4px}
+ .id{color:#999;font-size:.8em} .sub{color:#888;font-size:.8em;margin:.4rem 0 .1rem .5rem}
+ input[type=text]{width:100%;padding:.4rem;margin:.2rem 0;box-sizing:border-box}
+ textarea{width:100%;height:4.5rem;font-family:monospace;font-size:.85em;box-sizing:border-box}
+ button{padding:.4rem .9rem;margin:.3rem .3rem .3rem 0;cursor:pointer}
+ .hint{color:#777;font-size:.85em}
+ details{border:1px solid #e5e5e5;border-radius:8px;padding:.3rem .6rem;margin:.35rem 0}
+ summary{cursor:pointer;font-weight:600}
+ .chip{display:inline-block;background:#eef;border:1px solid #ccd;border-radius:12px;padding:.1rem .6rem;margin:.15rem .2rem;font-size:.85em}
+ .chip b{cursor:pointer;margin-left:.3rem;color:#a33}
+ #pres button{display:block;margin:.15rem 0}
+</style></head><body>
+<h1>📅 Polytech ADE → Google Calendar</h1>
+<p class="hint">Coche tes groupes (et/ou ajoute ton calendrier perso) → copie l'URL →
+ Google Calendar → <b>Autres agendas ＋ → À partir de l'URL</b>.
+ Les cours arrivent typés (CM/TD/TP…) et les contrôles flagués 🚨.</p>
+<h2>Filtrer les groupes</h2>
+<input type="text" id="filter" placeholder="ex: APP5, ET3 info, PEIP2 anglais…">
+<div id="cat"></div>
+<h2>Ton calendrier personnel (optionnel)</h2>
+<p class="hint">Cherche ton nom — la recherche interroge ADE en direct, rien n'est stocké ici.</p>
+<input type="text" id="pq" placeholder="NOM Prénom"> <button type="button" id="pgo">Chercher</button>
+<div id="pres"></div><div id="chips"></div>
+<h2>Autres ressources (ids séparés par des virgules)</h2>
+<input type="text" id="extra" placeholder="ex: 2464">
+<h2>Exclure des événements (regex, optionnel)</h2>
+<input type="text" id="not" placeholder="ex: APP5 GrA — retire les cours d'un groupe en trop">
+<h2>Nom de l'agenda</h2>
+<input type="text" id="name" placeholder="ADE Polytech">
+<h2>Ton URL d'abonnement</h2>
+<textarea id="url" readonly></textarea>
+<button id="copy">Copier</button>
+<a id="test" target="_blank"><button>Tester le flux</button></a>
+<script>
+const CATALOG = __CATALOG__;
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cat = document.getElementById('cat');
+const secs = new Map();
+for (const e of CATALOG) {
+  const top = e.path ? e.path.split(' / ')[0] : e.name;
+  if (!secs.has(top)) secs.set(top, []);
+  secs.get(top).push(e);
+}
+for (const [top, items] of secs) {
+  const d = document.createElement('details');
+  const n = items.filter(i => i.kind === 'group').length;
+  d.innerHTML = `<summary>${esc(top)} <span class="id">${n} groupes</span></summary>`;
+  let lastPath = null;
+  for (const it of items) {
+    if (it.path && it.path !== lastPath) {
+      const h = document.createElement('div'); h.className = 'sub';
+      h.textContent = it.path; h.dataset.q = it.path.toLowerCase();
+      d.appendChild(h); lastPath = it.path;
+    }
+    const l = document.createElement('label');
+    l.dataset.q = (it.name + ' ' + it.path).toLowerCase();
+    l.innerHTML = `<input type="checkbox" value="${it.id}"> ` +
+      (it.kind === 'folder' ? '📁 ' : '') + esc(it.name) +
+      (it.kind === 'folder' ? ' <span class="id">(tout le dossier)</span>' : '') +
+      ` <span class="id">#${it.id}</span>`;
+    d.appendChild(l);
+  }
+  cat.appendChild(d);
+}
+document.getElementById('filter').addEventListener('input', ev => {
+  const q = ev.target.value.trim().toLowerCase();
+  for (const d of cat.querySelectorAll('details')) {
+    let any = false;
+    for (const el of d.querySelectorAll('label,.sub')) {
+      const hit = !q || el.dataset.q.includes(q);
+      el.style.display = hit ? '' : 'none';
+      if (hit && el.tagName === 'LABEL') any = true;
+    }
+    d.style.display = (!q || any) ? '' : 'none';
+    d.open = q ? any : false;
+  }
+});
+const chips = new Map();
+function renderChips() {
+  const c = document.getElementById('chips'); c.innerHTML = '';
+  for (const [id, name] of chips) {
+    const s = document.createElement('span'); s.className = 'chip';
+    s.innerHTML = esc(name) + ` <span class="id">#${id}</span><b>✕</b>`;
+    s.querySelector('b').onclick = () => { chips.delete(id); renderChips(); build(); };
+    c.appendChild(s);
+  }
+}
+document.getElementById('pgo').onclick = async () => {
+  const q = document.getElementById('pq').value.trim();
+  const pres = document.getElementById('pres');
+  if (q.length < 2) return;
+  pres.textContent = 'Recherche…';
+  try {
+    const r = await fetch('/search?q=' + encodeURIComponent(q));
+    const js = await r.json();
+    pres.innerHTML = '';
+    if (!Array.isArray(js) || !js.length) { pres.textContent = 'Aucun résultat.'; return; }
+    for (const m of js.slice(0, 15)) {
+      const b = document.createElement('button'); b.type = 'button';
+      b.textContent = `＋ ${m.name} #${m.id}`;
+      b.onclick = () => { chips.set(m.id, m.name); renderChips(); build(); };
+      pres.appendChild(b);
+    }
+  } catch (e) { pres.textContent = 'Recherche indisponible.'; }
+};
+function build() {
+  const ids = [...cat.querySelectorAll('input[type=checkbox]:checked')].map(c => c.value);
+  const extra = document.getElementById('extra').value.split(',').map(s => s.trim()).filter(s => /^\\d+$/.test(s));
+  const all = [...new Set([...ids, ...[...chips.keys()].map(String), ...extra])];
+  const p = new URLSearchParams();
+  if (all.length) p.set('resources', all.join(','));
+  const nt = document.getElementById('not').value.trim(); if (nt) p.set('not', nt);
+  const nm = document.getElementById('name').value.trim(); if (nm) p.set('name', nm);
+  const url = location.origin + '/?' + p.toString();
+  document.getElementById('url').value = all.length ? url : '(sélectionne au moins un groupe ou un calendrier)';
+  document.getElementById('test').href = all.length ? url : '#';
+}
+cat.addEventListener('change', build);
+for (const id of ['extra','not','name']) document.getElementById(id).addEventListener('input', build);
+document.getElementById('copy').onclick = () =>
+  navigator.clipboard.writeText(document.getElementById('url').value);
+build();
+</script></body></html>""".replace("__CATALOG__", catalog_json)
+
+
+def _search_resources(query: str) -> list[dict]:
+    """Name -> id lookup via the LEGACY host's anonymous tree (ids preserved)."""
+    session = _session()
+    session.get(
+        f"https://{LEGACY_HOST}/jsp/custom/modules/plannings/anonymous_cal.jsp"
+        f"?resources=1&projectId={LEGACY_PROJECT_ID}&calType=ical",
+        timeout=REQUEST_TIMEOUT,
+    )
+    resp = session.post(
+        f"https://{LEGACY_HOST}/jsp/standard/gui/tree.jsp",
+        # the legacy server decodes form data as ISO-8859-1, not UTF-8
+        data={"search": query.encode("latin-1", "ignore")},
+        timeout=REQUEST_TIMEOUT,
+    )
+    # the legacy host serves ISO-8859-1; honour its header, never force utf-8
+    resp.encoding = resp.encoding or "latin-1"
+    out, seen = [], set()
+    for kind, pattern in (
+        ("resource", r"javascript:check\((\d+)[^)]*\)[^>]*>([^<]+)<"),
+        ("folder", r"javascript:checkBranch\((\d+)\)[^>]*>([^<]+)<"),
+    ):
+        for rid, name in re.findall(pattern, resp.text):
+            name = name.strip()
+            if name and rid not in seen:
+                seen.add(rid)
+                out.append({"id": int(rid), "name": name, "kind": kind})
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Cloud Function entry point
+# ---------------------------------------------------------------------------
 @functions_framework.http
 def proxy_ade(request):
-    """
-    Google Cloud Function entry point.
+    request_id = uuid.uuid4().hex[:8]
+    start = time.time()
 
-    Query Parameters:
-        - resources: Main resource ID (default: 3018)
-        - englishResources: English group resource ID (default: 1479)
-        - projectId: ADE project ID (default: 19)
+    # --- auxiliary routes -------------------------------------------------
+    if request.path.rstrip("/") == "/pick":
+        return Response(_picker_html(), content_type="text/html; charset=utf-8")
 
-    Returns:
-        ICS calendar file with Content-Type: text/calendar
-    """
-    start_time = time.time()
-    request_id = str(uuid.uuid4())[:8]  # Short unique ID for log correlation
+    if request.path.rstrip("/") == "/search":
+        query = (request.args.get("q") or "").strip()[:80]
+        if len(query) < 2:
+            return Response('{"error": "q must be at least 2 characters"}',
+                            status=400, content_type="application/json")
+        try:
+            results = _search_resources(query)
+        except requests.RequestException as exc:
+            logger.warning("[%s] /search failed: %s", request_id, exc)
+            return Response('{"error": "legacy ADE host unreachable"}',
+                            status=502, content_type="application/json")
+        return Response(json.dumps(results, ensure_ascii=False),
+                        content_type="application/json; charset=utf-8")
 
-    # Parse and validate parameters
-    main_resources = request.args.get("resources", "3018").strip()
-    english_resources = request.args.get("englishResources", "1479").strip()
-    project_id = request.args.get("projectId", "19").strip()
+    # No resource selection -> send humans to the picker.
+    if not (request.args.get("resources") or "").strip():
+        return Response("", status=302, headers={"Location": "/pick"})
 
-    # Validate inputs
-    for param_name, param_value in [
-        ("resources", main_resources),
-        ("englishResources", english_resources),
-        ("projectId", project_id),
-    ]:
-        valid, error = validate_resources(param_value, param_name)
-        if not valid:
-            logger.warning(f"[{request_id}] Invalid parameter: {error}")
-            return Response(
-                f"Bad Request: {error}",
-                status=400,
-                content_type="text/plain",
-            )
+    host = (request.args.get("host") or DEFAULT_HOST).strip()
+    resources = request.args.get("resources").strip()
+    project_id = (request.args.get("projectId") or DEFAULT_PROJECT_ID).strip()
+    d_first, d_last = default_window()
+    first_date = (request.args.get("firstDate") or d_first).strip()
+    last_date = (request.args.get("lastDate") or d_last).strip()
+    not_pattern = (request.args.get("not") or request.args.get("exclude") or "").strip()
+    cal_name = re.sub(r"[\x00-\x1f]", "", (request.args.get("name") or CAL_NAME))[:60]
+
+    # Validation
+    problems = []
+    if not VALID_RESOURCES.match(resources):
+        problems.append("resources must be numeric (comma-separated allowed)")
+    if not VALID_ID.match(project_id):
+        problems.append("projectId must be numeric")
+    if not VALID_DATE.match(first_date):
+        problems.append("firstDate must be YYYY-MM-DD")
+    if not VALID_DATE.match(last_date):
+        problems.append("lastDate must be YYYY-MM-DD")
+    if not re.match(r"^[A-Za-z0-9.\-]+$", host):
+        problems.append("invalid host")
+    not_re = None
+    if not_pattern:
+        if len(not_pattern) > 200:
+            problems.append("'not' too long (max 200 chars)")
+        else:
+            try:
+                not_re = re.compile(not_pattern, re.IGNORECASE)
+            except re.error as exc:
+                problems.append(f"'not' is not a valid regex: {exc}")
+    if problems:
+        return Response("Bad Request: " + "; ".join(problems), status=400, content_type="text/plain")
 
     logger.info(
-        f"[{request_id}] START - resources={main_resources}, english={english_resources}, projectId={project_id}"
+        "[%s] START host=%s resources=%s projectId=%s window=%s..%s",
+        request_id, host, resources, project_id, first_date, last_date,
     )
 
-    # Create session
-    session = create_session()
-
+    session = _session()
     try:
-        # Phase 1: Initialize session and fetch main RSS
-        phase1_start = time.time()
-        init_ade_session(session, main_resources, project_id, request_id)
-        events_main = fetch_rss_events(session, int(main_resources), request_id)
-
-        if not events_main:
-            logger.error(
-                f"[{request_id}] No events from main RSS (resources={main_resources})"
-            )
-            return Response(
-                "Error: Failed to fetch calendar data. ADE may be unavailable.",
-                status=503,
-                content_type="text/plain",
-            )
-
-        # Phase 1b: Check Anglais events for "Contrôle" type BEFORE removing
-        anglais_events = [
-            ev for ev in events_main if ev.get("title", "").strip() == "Anglais"
-        ]
-        non_anglais_events = [
-            ev for ev in events_main if ev.get("title", "").strip() != "Anglais"
-        ]
-        
-        # Fetch types for Anglais events to check for exams
-        anglais_to_keep = []
-        anglais_to_remove = []
-        
-        if anglais_events:
-            logger.info(
-                f"[{request_id}] Checking {len(anglais_events)} Anglais events for Contrôle type..."
-            )
-            
-            # Fetch types for all Anglais events in parallel
-            with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-                futures = {
-                    executor.submit(fetch_event_type, ev["guid"], session, request_id): ev
-                    for ev in anglais_events
-                }
-                
-                for future in concurrent.futures.as_completed(futures):
-                    ev = futures[future]
-                    try:
-                        _, ev_type = future.result()
-                        ev["type"] = ev_type
-                        
-                        # Keep Anglais if it's a Contrôle (exam)
-                        if ev_type.lower() in {"contrôle", "controle"}:
-                            anglais_to_keep.append(ev)
-                            logger.info(
-                                f"[{request_id}] KEEPING Anglais Contrôle: {ev['guid']} on {ev['start']}"
-                            )
-                        else:
-                            anglais_to_remove.append(ev)
-                    except Exception as e:
-                        logger.warning(
-                            f"[{request_id}] Error checking Anglais {ev['guid']}: {e}"
-                        )
-                        anglais_to_remove.append(ev)  # Remove if we can't check
-        
-        # Build filtered main events: non-Anglais + Anglais Contrôles only
-        filtered_main = non_anglais_events + anglais_to_keep
-        
-        logger.info(
-            f"[{request_id}] RSS {main_resources}: {len(events_main)} events, "
-            f"kept {len(anglais_to_keep)} Anglais Contrôle, "
-            f"removed {len(anglais_to_remove)} other Anglais → {len(filtered_main)} remaining"
-        )
-        phase1_duration = round(time.time() - phase1_start, 2)
-
-        # Phase 2: Initialize session and fetch English RSS
-        phase2_start = time.time()
-        # init_ade_session(session, english_resources, project_id, request_id)
-        events_english = fetch_rss_events(session, int(english_resources), request_id)
-
-        # Keep only non-Contrôle Anglais from English RSS (to avoid duplicating exams)
-        filtered_english = []
-        for ev in events_english:
-            if ev.get("title", "").strip() == "Anglais":
-                filtered_english.append(ev)
-        
-        logger.info(
-            f"[{request_id}] RSS {english_resources}: {len(events_english)} events, "
-            f"kept {len(filtered_english)} Anglais only"
-        )
-        phase2_duration = round(time.time() - phase2_start, 2)
-
-        # Phase 3: Combine and deduplicate
-        combined = {}
-        duplicates = 0
-        for ev in filtered_main + filtered_english:
-            guid = ev.get("guid")
-            if guid:
-                if guid in combined:
-                    duplicates += 1
-                else:
-                    combined[guid] = ev
-
-        events = list(combined.values())
-        if duplicates > 0:
-            logger.info(f"[{request_id}] Deduplicated {duplicates} events")
-        logger.info(f"[{request_id}] Combined total: {len(events)} unique events")
-
-        # Phase 4: Fetch types in parallel (skip events that already have types)
-        phase4_start = time.time()
-        type_map = {}
-        
-        # Events that need type fetching (exclude already-typed Anglais Contrôles)
-        events_needing_types = [ev for ev in events if not ev.get("type")]
-        events_with_types = [ev for ev in events if ev.get("type")]
-        
-        if events_with_types:
-            logger.info(
-                f"[{request_id}] Skipping type fetch for {len(events_with_types)} already-typed events"
-            )
-            for ev in events_with_types:
-                type_map[ev["guid"]] = ev["type"]
-
-        with concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-            futures = {
-                executor.submit(fetch_event_type, ev["guid"], session, request_id): ev[
-                    "guid"
-                ]
-                for ev in events_needing_types
-            }
-
-            for future in concurrent.futures.as_completed(futures):
-                try:
-                    eid, e_type = future.result()
-                    type_map[eid] = e_type
-                except Exception as e:
-                    eid = futures[future]
-                    logger.warning(f"[{request_id}] Type fetch error for {eid}: {e}")
-                    type_map[eid] = ""
-
-        # Apply types and collect statistics
-        types_found = 0
-        missing_types = []
-        type_counts = Counter()
-
-        for ev in events:
-            ev_type = type_map.get(ev["guid"], "")
-            ev["type"] = ev_type
-            if ev_type:
-                types_found += 1
-                type_counts[ev_type] += 1
-            else:
-                missing_types.append(f"{ev['guid']}: {ev['title']}")
-
-        phase4_duration = round(time.time() - phase4_start, 2)
-
-        # Log type statistics
-        logger.info(f"[{request_id}] Types found: {types_found}/{len(events)}")
-
-        if type_counts:
-            # Log type distribution
-            type_dist = ", ".join(f"{t}:{c}" for t, c in type_counts.most_common(10))
-            logger.info(f"[{request_id}] Type distribution: {type_dist}")
-
-        if missing_types:
-            logger.warning(
-                f"[{request_id}] Missing types ({len(missing_types)}): "
-                f"{missing_types[:5]}{'...' if len(missing_types) > 5 else ''}"
-            )
-
-        # Phase 5: Build ICS
-        ics_content = build_ics_calendar(events)
-        ics_size = len(ics_content)
-
-        # Final timing summary
-        total_duration = round(time.time() - start_time, 2)
-        logger.info(
-            f"[{request_id}] COMPLETE in {total_duration}s "
-            f"(init+main:{phase1_duration}s, english:{phase2_duration}s, types:{phase4_duration}s) "
-            f"- {len(events)} events, {ics_size} bytes"
-        )
-
-        # Return with proper headers
+        raw = fetch_native_ics(session, host, resources, project_id, first_date, last_date, request_id)
+    except Exception as exc:  # noqa: BLE001
+        logger.error("[%s] ADE fetch failed: %s", request_id, exc)
         return Response(
-            ics_content,
-            mimetype="text/calendar",
-            headers={
-                "Content-Disposition": "inline; filename=ade-planning.ics",
-                "Cache-Control": "public, max-age=3600",  # Cache for 1 hour
-                "X-Request-Id": request_id,
-                "X-Events-Count": str(len(events)),
-            },
-        )
-
-    except Exception as e:
-        logger.exception(f"[{request_id}] Unhandled error: {e}")
-        return Response(
-            f"Internal Server Error. Request ID: {request_id}",
-            status=500,
+            "Error: could not reach ADE. It may be temporarily unavailable.",
+            status=503,
             content_type="text/plain",
         )
 
-    finally:
-        session.close()
+    events = parse_events(raw)
+
+    # Deduplicate by UID (defensive — ADE already unions server-side).
+    seen_uids: set[str] = set()
+    deduped = []
+    for ev in events:
+        uid = ev.get("UID")
+        if uid and uid in seen_uids:
+            continue
+        if uid:
+            seen_uids.add(uid)
+        deduped.append(ev)
+    events = deduped
+
+    # Apply the `not` exclusion filter (summary + description + location).
+    if not_re:
+        before = len(events)
+        events = [
+            ev for ev in events
+            if not not_re.search(
+                f"{ev.get('SUMMARY', '')}\n{ev.get('DESCRIPTION', '')}\n{ev.get('LOCATION', '')}"
+            )
+        ]
+        logger.info(
+            "[%s] 'not=%s' filtered %d/%d events",
+            request_id, not_pattern, before - len(events), before,
+        )
+
+    if not events:
+        logger.error(
+            "[%s] 0 events (raw %d bytes). Wrong projectId/host, or the date "
+            "window has no events?", request_id, len(raw),
+        )
+        return Response(
+            "Error: ADE returned an empty calendar. Check projectId "
+            f"(currently {project_id}; 2026-2027 = 2 on {DEFAULT_HOST}) and that "
+            "firstDate/lastDate cover the school year.",
+            status=502,
+            content_type="text/plain",
+        )
+
+    types = get_official_types(host, project_id, resources, events, request_id)
+    ics, exam_count = build_calendar(events, types, cal_name=cal_name)
+    logger.info(
+        "[%s] DONE %d events (%d exams, %d typed activities) in %.2fs, %d bytes",
+        request_id, len(events), exam_count, len(types), time.time() - start, len(ics),
+    )
+
+    return Response(
+        ics,
+        status=200,
+        content_type="text/calendar; charset=utf-8",
+        headers={
+            "Content-Disposition": 'inline; filename="ADECal.ics"',
+            "Cache-Control": "public, max-age=3600",
+        },
+    )
 
 
-# For local testing
+# ---------------------------------------------------------------------------
+# Local dev:  python main.py  -> writes ADECal.ics and prints a summary
+# ---------------------------------------------------------------------------
 if __name__ == "__main__":
-    from flask import Flask, request as flask_request
+    import sys
 
-    app = Flask(__name__)
-
-    @app.route("/")
-    def index():
-        return proxy_ade(flask_request)
-
-    @app.route("/health")
-    def health():
-        """Health check endpoint for load balancers."""
-        return Response("OK", status=200, content_type="text/plain")
-
-    print("=" * 60)
-    print("ADE RSS to ICS Proxy - Local Development Server")
-    print("=" * 60)
-    print("Endpoints:")
-    print("  GET /              - Main calendar endpoint")
-    print("  GET /health        - Health check")
-    print("")
-    print("Parameters:")
-    print("  ?resources=3018    - Main resource ID")
-    print("  ?englishResources=1479 - English group resource ID")
-    print("  ?projectId=19      - ADE project ID")
-    print("=" * 60)
-
-    app.run(debug=True, port=8080)
+    if len(sys.argv) < 2:
+        print("usage: python main.py <resources> [projectId]   e.g. python main.py 1406,1196")
+        sys.exit(1)
+    res = sys.argv[1]
+    pid = sys.argv[2] if len(sys.argv) > 2 else DEFAULT_PROJECT_ID
+    f, l = default_window()
+    sess = _session()
+    raw = fetch_native_ics(sess, DEFAULT_HOST, res, pid, f, l, "local")
+    evs = parse_events(raw)
+    types = get_official_types(DEFAULT_HOST, pid, res, evs, "local")
+    ics, exams = build_calendar(evs, types)
+    with open("ADECal.ics", "w", encoding="utf-8", newline="") as fh:
+        fh.write(ics)
+    print(f"host={DEFAULT_HOST} resources={res} projectId={pid} window={f}..{l}")
+    print(f"{len(evs)} events, {len(types)} typed activities, {exams} exams -> ADECal.ics ({len(ics)} bytes)")
+    typed = sum(1 for ev in evs if types.get(event_id_of(ev.get('UID', '')) or -1))
+    print(f"events with official type: {typed}/{len(evs)}")
+    for ev in evs:
+        eid = event_id_of(ev.get("UID", "")) or -1
+        t = types.get(eid, "")
+        s = ev.get("SUMMARY", "")
+        if (t and EXAM_TYPE_RE.search(t)) or (not t and is_exam(s)):
+            print(f"  EXAM: {ev.get('DTSTART','')} {s} [{t or 'name-based'}]")
