@@ -58,6 +58,8 @@ import time
 
 import requests
 
+from ade_tls import ca_bundle
+
 logger = logging.getLogger("ade_gwt")
 
 # --- Constants captured from the deployed ADE 6.17 build (2026-08-25) --------
@@ -191,6 +193,7 @@ class DirectPlanningClient:
         self.base = f"https://{self.host}/direct/gwtdirectplanning/"
         self.data_token = data_token
         self.session = requests.Session()
+        self.session.verify = ca_bundle()  # ADE omits its TLS intermediate
         self.session.headers.update({"User-Agent": "Mozilla/5.0 ade2ics"})
         self._rpc_headers = {
             "Content-Type": "text/x-gwt-rpc; charset=UTF-8",

@@ -29,19 +29,20 @@ So the old, slow RSS + eventInfo.jsp + per-event Type fan-out is gone. We now:
 
 Resource ids: the full group tree (516 groups across PEIP / FISE / FISA /
 Externes) was harvested from the ADE tree into catalog.json — ids were
-preserved in the copy to the new server. Personal student resources exist too
-(one per student, e.g. a search for your name returns your id) but are looked
-up live via /search, never stored here.
+preserved in the copy to the new server. Individual students are deliberately
+NOT stored anywhere in this project; any other resource id can still be passed
+by hand.
+
+(There used to be a /search name -> id lookup. It relied on the legacy host's
+anonymous tree, which died in late 2026; the new host only offers search
+through a login or the reverse-engineered GWT app, which returns ids without
+names. It was removed rather than kept half-working.)
 
 Routes:
     /            the ICS feed (subscribe to this; `resources` is required —
                  a bare visit redirects to /pick)
-    /pick        HTML picker: every Polytech group (from catalog.json), a
-                 personal-calendar search, and a subscription-URL builder
-    /search?q=   resource-name -> id lookup (via the legacy host's tree, ids
-                 are preserved across the migration). This is also how
-                 students find their own personal resource id — individual
-                 names are deliberately NOT stored anywhere in this project.
+    /pick        HTML picker: every Polytech group (from catalog.json) and a
+                 subscription-URL builder
 
 Query parameters (feed):
     resources   REQUIRED. Resource id, or comma-separated ids — the UNION of
@@ -73,6 +74,8 @@ import requests
 from flask import Response
 from requests.adapters import HTTPAdapter
 
+from ade_tls import ca_bundle
+
 try:
     import ade_gwt
 except Exception:  # pragma: no cover - keep the feed alive even if the module breaks
@@ -89,8 +92,6 @@ logger = logging.getLogger("ade_ics_proxy")
 # Configuration
 # ---------------------------------------------------------------------------
 DEFAULT_HOST = "planning.polytech.universite-paris-saclay.fr"
-LEGACY_HOST = "ade-planning.polytech.universite-paris-saclay.fr"  # for /search
-LEGACY_PROJECT_ID = "19"     # last project on the legacy host (same resource ids)
 DEFAULT_PROJECT_ID = "2"     # 2026-2027 on the new server. Bump this each new year.
 
 REQUEST_TIMEOUT = 20         # seconds
@@ -106,8 +107,7 @@ VALID_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 # The full Polytech group tree (516 groups + selectable folders), harvested
 # from the ADE tree into catalog.json — ids survived the 2026 server migration.
 # Entries: {"id": int, "name": str, "kind": "group"|"folder", "path": str}.
-# Individual students are deliberately NOT in this file (privacy): the picker
-# finds personal resources live through /search instead.
+# Individual students are deliberately NOT in this file (privacy).
 def _load_catalog() -> list[dict]:
     try:
         path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "catalog.json")
@@ -147,6 +147,7 @@ _types_cache: dict = {"key": None, "at": 0.0, "types": {}}
 # ---------------------------------------------------------------------------
 def _session() -> requests.Session:
     s = requests.Session()
+    s.verify = ca_bundle()  # ADE omits its TLS intermediate — see ade_tls.py
     adapter = HTTPAdapter(max_retries=0)
     s.mount("https://", adapter)
     s.mount("http://", adapter)
@@ -397,21 +398,14 @@ def _picker_html() -> str:
  .hint{color:#777;font-size:.85em}
  details{border:1px solid #e5e5e5;border-radius:8px;padding:.3rem .6rem;margin:.35rem 0}
  summary{cursor:pointer;font-weight:600}
- .chip{display:inline-block;background:#eef;border:1px solid #ccd;border-radius:12px;padding:.1rem .6rem;margin:.15rem .2rem;font-size:.85em}
- .chip b{cursor:pointer;margin-left:.3rem;color:#a33}
- #pres button{display:block;margin:.15rem 0}
 </style></head><body>
 <h1>📅 Polytech ADE → Google Calendar</h1>
-<p class="hint">Coche tes groupes (et/ou ajoute ton calendrier perso) → copie l'URL →
+<p class="hint">Coche tes groupes → copie l'URL →
  Google Calendar → <b>Autres agendas ＋ → À partir de l'URL</b>.
  Les cours arrivent typés (CM/TD/TP…) et les contrôles flagués 🚨.</p>
 <h2>Filtrer les groupes</h2>
 <input type="text" id="filter" placeholder="ex: APP5, ET3 info, PEIP2 anglais…">
 <div id="cat"></div>
-<h2>Ton calendrier personnel (optionnel)</h2>
-<p class="hint">Cherche ton nom — la recherche interroge ADE en direct, rien n'est stocké ici.</p>
-<input type="text" id="pq" placeholder="NOM Prénom"> <button type="button" id="pgo">Chercher</button>
-<div id="pres"></div><div id="chips"></div>
 <h2>Autres ressources (ids séparés par des virgules)</h2>
 <input type="text" id="extra" placeholder="ex: 2464">
 <h2>Exclure des événements (regex, optionnel)</h2>
@@ -466,44 +460,16 @@ document.getElementById('filter').addEventListener('input', ev => {
     d.open = q ? any : false;
   }
 });
-const chips = new Map();
-function renderChips() {
-  const c = document.getElementById('chips'); c.innerHTML = '';
-  for (const [id, name] of chips) {
-    const s = document.createElement('span'); s.className = 'chip';
-    s.innerHTML = esc(name) + ` <span class="id">#${id}</span><b>✕</b>`;
-    s.querySelector('b').onclick = () => { chips.delete(id); renderChips(); build(); };
-    c.appendChild(s);
-  }
-}
-document.getElementById('pgo').onclick = async () => {
-  const q = document.getElementById('pq').value.trim();
-  const pres = document.getElementById('pres');
-  if (q.length < 2) return;
-  pres.textContent = 'Recherche…';
-  try {
-    const r = await fetch('/search?q=' + encodeURIComponent(q));
-    const js = await r.json();
-    pres.innerHTML = '';
-    if (!Array.isArray(js) || !js.length) { pres.textContent = 'Aucun résultat.'; return; }
-    for (const m of js.slice(0, 15)) {
-      const b = document.createElement('button'); b.type = 'button';
-      b.textContent = `＋ ${m.name} #${m.id}`;
-      b.onclick = () => { chips.set(m.id, m.name); renderChips(); build(); };
-      pres.appendChild(b);
-    }
-  } catch (e) { pres.textContent = 'Recherche indisponible.'; }
-};
 function build() {
   const ids = [...cat.querySelectorAll('input[type=checkbox]:checked')].map(c => c.value);
   const extra = document.getElementById('extra').value.split(',').map(s => s.trim()).filter(s => /^\\d+$/.test(s));
-  const all = [...new Set([...ids, ...[...chips.keys()].map(String), ...extra])];
+  const all = [...new Set([...ids, ...extra])];
   const p = new URLSearchParams();
   if (all.length) p.set('resources', all.join(','));
   const nt = document.getElementById('not').value.trim(); if (nt) p.set('not', nt);
   const nm = document.getElementById('name').value.trim(); if (nm) p.set('name', nm);
   const url = location.origin + '/?' + p.toString();
-  document.getElementById('url').value = all.length ? url : '(sélectionne au moins un groupe ou un calendrier)';
+  document.getElementById('url').value = all.length ? url : '(sélectionne au moins un groupe)';
   document.getElementById('test').href = all.length ? url : '#';
 }
 cat.addEventListener('change', build);
@@ -512,35 +478,6 @@ document.getElementById('copy').onclick = () =>
   navigator.clipboard.writeText(document.getElementById('url').value);
 build();
 </script></body></html>""".replace("__CATALOG__", catalog_json)
-
-
-def _search_resources(query: str) -> list[dict]:
-    """Name -> id lookup via the LEGACY host's anonymous tree (ids preserved)."""
-    session = _session()
-    session.get(
-        f"https://{LEGACY_HOST}/jsp/custom/modules/plannings/anonymous_cal.jsp"
-        f"?resources=1&projectId={LEGACY_PROJECT_ID}&calType=ical",
-        timeout=REQUEST_TIMEOUT,
-    )
-    resp = session.post(
-        f"https://{LEGACY_HOST}/jsp/standard/gui/tree.jsp",
-        # the legacy server decodes form data as ISO-8859-1, not UTF-8
-        data={"search": query.encode("latin-1", "ignore")},
-        timeout=REQUEST_TIMEOUT,
-    )
-    # the legacy host serves ISO-8859-1; honour its header, never force utf-8
-    resp.encoding = resp.encoding or "latin-1"
-    out, seen = [], set()
-    for kind, pattern in (
-        ("resource", r"javascript:check\((\d+)[^)]*\)[^>]*>([^<]+)<"),
-        ("folder", r"javascript:checkBranch\((\d+)\)[^>]*>([^<]+)<"),
-    ):
-        for rid, name in re.findall(pattern, resp.text):
-            name = name.strip()
-            if name and rid not in seen:
-                seen.add(rid)
-                out.append({"id": int(rid), "name": name, "kind": kind})
-    return out
 
 
 # ---------------------------------------------------------------------------
@@ -554,20 +491,6 @@ def proxy_ade(request):
     # --- auxiliary routes -------------------------------------------------
     if request.path.rstrip("/") == "/pick":
         return Response(_picker_html(), content_type="text/html; charset=utf-8")
-
-    if request.path.rstrip("/") == "/search":
-        query = (request.args.get("q") or "").strip()[:80]
-        if len(query) < 2:
-            return Response('{"error": "q must be at least 2 characters"}',
-                            status=400, content_type="application/json")
-        try:
-            results = _search_resources(query)
-        except requests.RequestException as exc:
-            logger.warning("[%s] /search failed: %s", request_id, exc)
-            return Response('{"error": "legacy ADE host unreachable"}',
-                            status=502, content_type="application/json")
-        return Response(json.dumps(results, ensure_ascii=False),
-                        content_type="application/json; charset=utf-8")
 
     # No resource selection -> send humans to the picker.
     if not (request.args.get("resources") or "").strip():
